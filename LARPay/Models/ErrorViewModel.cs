@@ -1,6 +1,4 @@
-using System;
-
-namespace LARPay.Models
+namespace dk.lashout.LARPay.Models
 {
     public class ErrorViewModel
     {

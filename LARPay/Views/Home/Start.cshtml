@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "Getting started";
+}
+
+<h1>Apply for account</h1>
+
+<form id="customer_form">
+    <div class="form-group">
+        <label for="inputName">Name</label>
+        <input type="text" class="form-control" id="inputName" placeholder="" />
+    </div>
+    <div class="form-group">
+        <label for="inputIdentity">Identity</label>
+        <input type="text" class="form-control" id="inputIdentity" placeholder=""/>
+    </div>
+    <div class="form-group">
+        <label for="inputPincode">Pincode</label>
+        <input type="password" class="form-control" id="inputPincode" placeholder="0000"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            var customer_application;
+            $.getJSON('/customer/create',
+                function(data) {
+                    customer_application = data;
+                    $('#inputName').attr('placeholder', data.name);
+                    $('#inputIdentity').attr('placeholder', data.identity);
+                    $('#inputPincode').attr('placeholder', data.pincode);
+                });
+
+            $('#customer_form').on('submit',
+                function () {
+                    create($('#inputName').val(), $('#inputIdentity').val(), $('#inputPincode').val());
+                    return false;
+                });
+
+            function create(name, identity, pincode) {
+                customer_request = jQuery.extend({}, customer_application);
+
+                customer_request.name = name;
+                customer_request.identity = identity;
+                customer_request.pincode = pincode;
+
+                $.post('/customer/create',
+                    customer_request,
+                    function() {
+                        alert('Success!');
+                    }).fail(function() {
+                    alert('Failed!');
+                });
+            }
+        });
+    </script>
+}

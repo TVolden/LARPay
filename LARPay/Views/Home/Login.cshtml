@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<h1>Login</h1>
+
+<form id="login_form">
+    <div class="form-group">
+        <label for="inputIdentity">Identity</label>
+        <input type="text" class="form-control" id="inputIdentity" placeholder="" />
+    </div>
+    <div class="form-group">
+        <label for="inputPincode">Pincode</label>
+        <input type="password" class="form-control" id="inputPincode" placeholder="" />
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            var login_application;
+            $.getJSON('/customer/login',
+                function(data) {
+                    login_application = data;
+                    $('#inputIdentity').attr('placeholder', data.identity);
+                    $('#inputPincode').attr('placeholder', data.pincode);
+                });
+
+            $('#login_form').on('submit',
+                function () {
+                    login($('#inputIdentity').val(), $('#inputPincode').val());
+                    return false;
+                });
+
+            function login(identity, pincode) {
+                login_request = jQuery.extend({}, login_application);
+                login_request.identity = identity;
+                login_request.pincode = pincode;
+                $.post('/customer/login',
+                    login_request,
+                    function() {
+                        alert('Success!');
+                    }).fail(function() {
+                        alert('Failed!');
+                });
+            }
+        });
+    </script>
+}
