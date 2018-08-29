@@ -27,5 +27,10 @@ namespace dk.lashout.LARPay.Controllers
         {
             return View();
         }
+
+        public IActionResult Account()
+        {
+            return View();
+        }
     }
 }

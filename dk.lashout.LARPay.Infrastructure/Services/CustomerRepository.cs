@@ -1,32 +1,20 @@
-﻿using System.Collections.Generic;
-using dk.lashout.LARPay.Core.Entities;
+﻿using dk.lashout.LARPay.Core.Entities;
 using dk.lashout.LARPay.Core.Services;
 
 namespace dk.lashout.LARPay.Infrastructure.Services
 {
     public class CustomerRepository : ICustomerRepository
     {
-        private List<Customer> _customers;
+        private readonly ICredentialsRepository _repository;
 
-        public CustomerRepository()
+        public CustomerRepository(ICredentialsRepository repository)
         {
-            _customers = new List<Customer>();
-        }
-
-        public void Insert(Customer customer)
-        {
-            _customers.Add(customer);
+            _repository = repository;
         }
 
         public Customer GetByIdentity(string identity)
         {
-            foreach (var customer in _customers)
-            {
-                if (customer.Identity == identity)
-                    return customer;
-            }
-
-            return null;
+            return _repository.GetByIdentity(identity);
         }
     }
 }

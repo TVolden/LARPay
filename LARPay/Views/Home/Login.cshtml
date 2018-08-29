@@ -40,8 +40,9 @@
                 login_request.pincode = pincode;
                 $.post('/customer/login',
                     login_request,
-                    function() {
-                        alert('Success!');
+                    function (data) {
+                        sessionStorage.token = data;
+                        window.location.href = '/';
                     }).fail(function() {
                         alert('Failed!');
                 });

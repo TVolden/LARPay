@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using dk.lashout.LARPay.Core.Services;
 using dk.lashout.LARPay.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -18,24 +19,38 @@ namespace dk.lashout.LARPay
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var secretKey = Encoding.UTF8.GetBytes(_configuration["jwt:SecretKey"]);
+
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
+                    options.IncludeErrorDetails = true;
                     options.RequireHttpsMetadata = false;
-                    options.Audience = "http://localhost:52188/";
-                    options.Authority = "http://localhost:52188/";
-            });
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        IssuerSigningKey = new SymmetricSecurityKey(secretKey),
+                        ValidAudience = _configuration["jwt:Audience"],
+                        ValidIssuer = _configuration["jwt:Issuer"],
+                        ValidateIssuerSigningKey = true,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.FromMinutes(0)
+                    };
+                });
 
+            services.AddSingleton<ITransactionRepository, TransactionRepository>();
+            services.AddSingleton<IAccountService, AccountService>();
+            services.AddSingleton<ICredentialsRepository, CredentialsRepository>();
             services.AddSingleton<ICustomerRepository, CustomerRepository>();
             services.AddSingleton<ICustomerService, CustomerService>();
 
@@ -67,12 +82,6 @@ namespace dk.lashout.LARPay
             });
         }
 
-        private void ConfigureOAuthTokenComsumption(IApplicationBuilder app)
-        {
-            var issuer = Configuration["jwt:issuer"];
-            var audienceId = Configuration["jwt:audienceId"];
-            var audienceSecret = Base64UrlTextEncoder.Decode(Configuration["jwt:audienceId"]);
-        }
     }
 
     public class ApplicationUser
