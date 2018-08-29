@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using dk.lashout.LARPay.Core.Entities;
 using dk.lashout.LARPay.Core.Services;
 using dk.lashout.LARPay.Web.Models;
 using Microsoft.AspNetCore.Authorization;
