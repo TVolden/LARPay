@@ -6,5 +6,6 @@ namespace dk.lashout.LARPay.Core.Services
     {
         void Transfer(Customer Sender, Customer Recipient, double amount, string description);
         double Balance(Customer customer);
+        Transaction[] Statement(Customer customer);
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System.Security.Claims;
-using dk.lashout.LARPay.Core.Services;
-using dk.lashout.LARPay.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using dk.lashout.LARPay.Core.Services;
+using dk.lashout.LARPay.Core.Entities;
+using dk.lashout.LARPay.Web.Models;
+using System.Collections.Generic;
 
 namespace dk.lashout.LARPay.Web.Controllers
 {
@@ -32,20 +34,44 @@ namespace dk.lashout.LARPay.Web.Controllers
         [HttpPost]
         public IActionResult Create(TransactionViewModel model)
         {
-            ClaimsPrincipal principal = HttpContext.User;
-
-            var user = principal.Identity.Name;
-            var sender = _customerService.GetCustomer(user);
+            var sender = getCurrentUser();
             var recipient = _customerService.GetCustomer(model.Recipient);
             _accountService.Transfer(sender, recipient, model.Amount, model.Description);
 
             return Ok();
         }
 
-        public IActionResult Index(string id)
+        [Authorize]
+        public IActionResult Index()
         {
-            var customer = _customerService.GetCustomer(id);
+            var customer = getCurrentUser();
             return Json(_accountService.Balance(customer));
+        }
+
+        [Authorize]
+        public IActionResult List()
+        {
+            var customer = getCurrentUser();
+            var accountStatement = _accountService.Statement(customer);
+            var transactions = new List<TransactionViewModel>();
+            foreach(var trx in accountStatement)
+            {
+                var transaction = new TransactionViewModel()
+                {
+                    Amount = trx.Amount,
+                    Description = trx.Description,
+                    Recipient = trx.Linked.Identity
+                };
+                transactions.Add(transaction);
+            }
+            return Json(transactions.ToArray());
+        }
+
+        private Customer getCurrentUser()
+        {
+            ClaimsPrincipal principal = HttpContext.User;
+            var user = principal.Identity.Name;
+            return _customerService.GetCustomer(user);
         }
     }
 }

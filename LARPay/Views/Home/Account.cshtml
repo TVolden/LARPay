@@ -4,6 +4,19 @@
 
 <h1>Account</h1>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Recipient</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Description</th>
+        </tr>
+    </thead>
+    <tbody id="transactions">
+
+    </tbody>
+</table>
+
 <div class="row">
     <div class="col">Balance:</div>
     <div class="col" id="balance"></div>
@@ -32,10 +45,28 @@
     <script>
         $(function () {
 
-            $.getJSON('/transaction/index/a',
-                function (data) {
+            $.ajax({
+                type: "GET",
+                url: '/transaction/index',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", 'Bearer ' + sessionStorage.token);
+                }
+            }).done(function (data) {
                     $('#balance').text(data);
                 });
+
+            $.ajax({
+                type: "GET",
+                url: '/transaction/list',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", 'Bearer ' + sessionStorage.token);
+                }
+            }).done(function (data) {
+                for (i = data.length-1; i >= 0; i--) {
+                        $('#transactions').append('<tr><td scope="row">' + data[i].recipient + '</td><td>' + data[i].amount + '</td><td>' + data[i].description + '</td></tr>');
+                }
+            });
+
 
             var transfer_application;
             $.getJSON('/transaction/create',
