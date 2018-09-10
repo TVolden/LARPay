@@ -4,7 +4,6 @@ using dk.lashout.LARPay.Core.Entities;
 namespace dk.lashout.LARPay.Core.Services
 {
     public class AccountService : IAccountService
-
     {
         private readonly ITransactionRepository _repository;
 
@@ -36,6 +35,11 @@ namespace dk.lashout.LARPay.Core.Services
         public double Balance(Customer customer)
         {
            return _repository.GetTransactions(customer).Sum(t => t.Amount);
+        }
+
+        public Transaction[] Statement(Customer customer)
+        {
+            return _repository.GetTransactions(customer);
         }
     }
 }
