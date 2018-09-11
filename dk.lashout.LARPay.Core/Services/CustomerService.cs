@@ -1,38 +1,34 @@
-﻿using System;
-using dk.lashout.LARPay.Core.Entities;
+﻿using dk.lashout.LARPay.Core.Entities;
+using dk.lashout.LARPay.Core.Shared;
 
 namespace dk.lashout.LARPay.Core.Services
 {
     public class CustomerService : ICustomerService
     {
-        private readonly ICredentialsRepository _repository;
+        private readonly ICustomerRepository _repository;
 
-        public CustomerService(ICredentialsRepository repository)
+        public CustomerService(ICustomerRepository repository)
         {
             _repository = repository;
         }
 
-        public void Create(Customer customer, int pincode)
+        public bool HasCustomer(string identity)
         {
-            if (_repository.GetByIdentity(customer.Identity) != null)
-                throw new Exception("Identity taken");
+            return _repository.GetByIdentity(identity) != null;
+        }
 
-            var credentials = new Credentials()
-            {
-                Identity = customer.Identity,
-                Name = customer.Name,
-                Pincode = pincode
-            };
-            _repository.Insert(credentials);
+        public void Create(ICustomer customer, int pincode)
+        {
+            _repository.Insert(customer, pincode);
         }
 
         public bool Login(string identity, int pincode)
         {
             var customer = _repository.GetByIdentity(identity);
-            return customer != null && pincode == customer.Pincode;
+            return _repository.Authenticate(customer, pincode);
         }
 
-        public Customer GetCustomer(string identity)
+        public ICustomer GetCustomer(string identity)
         {
             return _repository.GetByIdentity(identity);
         }

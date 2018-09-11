@@ -1,32 +1,32 @@
 ﻿using System.Collections.Generic;
 using dk.lashout.LARPay.Core.Entities;
-using dk.lashout.LARPay.Core.Services;
+using dk.lashout.LARPay.Core.Shared;
 
 namespace dk.lashout.LARPay.Infrastructure.Services
 {
     public class TransactionRepository : ITransactionRepository
     {
-        private readonly Dictionary<Customer, List<Transaction>> _accounts;
+        private readonly Dictionary<ICustomer, List<ITransaction>> _accounts;
 
         public TransactionRepository()
         {
-            _accounts = new Dictionary<Customer, List<Transaction>>();
+            _accounts = new Dictionary<ICustomer, List<ITransaction>>();
         }
 
-        public void Add(Customer customer, Transaction transaction)
+        public void Add(ICustomer customer, ITransaction transaction)
         {
             GetAccount(customer).Add(transaction);
         }
 
-        public Transaction[] GetTransactions(Customer customer)
+        public ITransaction[] GetTransactions(ICustomer customer)
         {
             return GetAccount(customer).ToArray();
         }
 
-        private List<Transaction> GetAccount(Customer customer)
+        private List<ITransaction> GetAccount(ICustomer customer)
         {
             if (!_accounts.ContainsKey(customer))
-                _accounts.Add(customer, new List<Transaction>());
+                _accounts.Add(customer, new List<ITransaction>());
 
             return _accounts[customer];
         }

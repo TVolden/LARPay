@@ -1,6 +1,6 @@
 ﻿namespace dk.lashout.LARPay.Core.Entities
 {
-    public class Customer
+    class Customer : ICustomer
     {
         public string Name { get; set; }
         public string Identity { get; set; }

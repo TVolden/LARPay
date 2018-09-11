@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using dk.lashout.LARPay.Core.Entities;
+using dk.lashout.LARPay.Core.Providers;
+using dk.lashout.LARPay.Core.Shared;
 
 namespace dk.lashout.LARPay.Core.Services
 {
@@ -12,32 +14,34 @@ namespace dk.lashout.LARPay.Core.Services
             _repository = repository;
         }
 
-        public void Transfer(Customer sender, Customer recipient, double amount, string description)
+        public void Transfer(ICustomer sender, ICustomer recipient, double amount, string description)
         {
             var debit = new Transaction()
             {
                 Amount = -amount,
                 Description = description,
-                Linked = recipient
+                Linked = recipient,
+                Date = TimeProvider.Current.UtcNow
             };
 
             var credit = new Transaction()
             {
                 Amount = amount,
                 Description = description,
-                Linked = sender
+                Linked = sender,
+                Date = TimeProvider.Current.UtcNow
             };
 
             _repository.Add(sender, debit);
             _repository.Add(recipient, credit);
         }
 
-        public double Balance(Customer customer)
+        public double Balance(ICustomer customer)
         {
            return _repository.GetTransactions(customer).Sum(t => t.Amount);
         }
 
-        public Transaction[] Statement(Customer customer)
+        public ITransaction[] Statement(ICustomer customer)
         {
             return _repository.GetTransactions(customer);
         }

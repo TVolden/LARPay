@@ -1,22 +1,19 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using dk.lashout.LARPay.Core.Services;
-using dk.lashout.LARPay.Core.Entities;
 using dk.lashout.LARPay.Web.Models;
 using System.Collections.Generic;
+using dk.lashout.LARPay.Core.Facades;
 
 namespace dk.lashout.LARPay.Web.Controllers
 {
     public class TransactionController : Controller
     {
-        private readonly ICustomerService _customerService;
-        private readonly IAccountService _accountService;
+        private readonly IAccounts _accounts;
 
-        public TransactionController(ICustomerService customerService, IAccountService accountService)
+        public TransactionController(IAccounts accounts)
         {
-            _customerService = customerService;
-            _accountService = accountService;
+            _accounts = accounts;
         }
 
         public IActionResult Create()
@@ -35,8 +32,7 @@ namespace dk.lashout.LARPay.Web.Controllers
         public IActionResult Create(TransactionViewModel model)
         {
             var sender = getCurrentUser();
-            var recipient = _customerService.GetCustomer(model.Recipient);
-            _accountService.Transfer(sender, recipient, model.Amount, model.Description);
+            _accounts.Transfer(sender, model.Recipient, model.Amount, model.Description);
 
             return Ok();
         }
@@ -45,14 +41,14 @@ namespace dk.lashout.LARPay.Web.Controllers
         public IActionResult Index()
         {
             var customer = getCurrentUser();
-            return Json(_accountService.Balance(customer));
+            return Json(_accounts.Balance(customer));
         }
 
         [Authorize]
         public IActionResult List()
         {
             var customer = getCurrentUser();
-            var accountStatement = _accountService.Statement(customer);
+            var accountStatement = _accounts.Statement(customer);
             var transactions = new List<TransactionViewModel>();
             foreach(var trx in accountStatement)
             {
@@ -60,18 +56,18 @@ namespace dk.lashout.LARPay.Web.Controllers
                 {
                     Amount = trx.Amount,
                     Description = trx.Description,
-                    Recipient = trx.Linked.Identity
+                    Recipient = trx.Linked.Identity,
+                    Date = trx.Date
                 };
                 transactions.Add(transaction);
             }
             return Json(transactions.ToArray());
         }
 
-        private Customer getCurrentUser()
+        private string getCurrentUser()
         {
             ClaimsPrincipal principal = HttpContext.User;
-            var user = principal.Identity.Name;
-            return _customerService.GetCustomer(user);
+            return principal.Identity.Name;
         }
     }
 }

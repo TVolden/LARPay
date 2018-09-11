@@ -7,6 +7,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th scope="col">Date</th>
             <th scope="col">Recipient</th>
             <th scope="col">Amount</th>
             <th scope="col">Description</th>
@@ -63,10 +64,9 @@
                 }
             }).done(function (data) {
                 for (i = data.length-1; i >= 0; i--) {
-                        $('#transactions').append('<tr><td scope="row">' + data[i].recipient + '</td><td>' + data[i].amount + '</td><td>' + data[i].description + '</td></tr>');
+                    $('#transactions').append('<tr><td scope="row">' + data[i].date + '</td><td scope="row">' + data[i].recipient + '</td><td>' + data[i].amount + '</td><td>' + data[i].description + '</td></tr>');
                 }
             });
-
 
             var transfer_application;
             $.getJSON('/transaction/create',
@@ -76,7 +76,6 @@
                     $('#inputAmount').attr('placeholder', data.amount);
                     $('#inputDescription').attr('placeholder', data.description);
                 });
-
 
             $('#transfer_form').on('submit',
                 function () {
