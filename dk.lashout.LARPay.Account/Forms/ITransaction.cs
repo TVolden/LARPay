@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace dk.lashout.LARPay.Accountance.Records
+namespace dk.lashout.LARPay.Accounting.Forms
 {
     public interface ITransaction
     {

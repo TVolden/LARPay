@@ -1,9 +1,9 @@
-﻿using dk.lashout.LARPay.Accountance.Clerks;
-using dk.lashout.LARPay.Accountance.Records;
+﻿using dk.lashout.LARPay.Accounting.Clerks;
+using dk.lashout.LARPay.Accounting.Forms;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace dk.lashout.LARPay.Accountance.Clerks
+namespace dk.lashout.LARPay.Accounting.Service
 {
     public class AccountService : IBalance, IStatement, ITransfer
     {

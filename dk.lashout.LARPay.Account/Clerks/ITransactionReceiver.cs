@@ -1,4 +1,4 @@
-﻿namespace dk.lashout.LARPay.Accountance.Clerks
+﻿namespace dk.lashout.LARPay.Accounting.Clerks
 {
     public interface ITransactionStorer
     {

@@ -1,4 +1,4 @@
-﻿namespace dk.lashout.LARPay.Accountance
+﻿namespace dk.lashout.LARPay.Accounting
 {
     public interface ITransfer
     {

@@ -1,7 +1,7 @@
-﻿using dk.lashout.LARPay.Accountance.Records;
+﻿using dk.lashout.LARPay.Accounting.Forms;
 using System.Collections.Generic;
 
-namespace dk.lashout.LARPay.Accountance.Clerks
+namespace dk.lashout.LARPay.Accounting.Clerks
 {
     public interface ITransactionRetreiver
     {

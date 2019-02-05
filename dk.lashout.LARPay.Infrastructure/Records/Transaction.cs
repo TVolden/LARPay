@@ -1,5 +1,5 @@
 ﻿using System;
-using dk.lashout.LARPay.Accountance.Records;
+using dk.lashout.LARPay.Accounting.Forms;
 
 namespace dk.lashout.LARPay.Archives.Records
 {
