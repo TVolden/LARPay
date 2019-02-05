@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\dk.lashout.LARPay.Core\dk.lashout.LARPay.Core.csproj" />
-    <ProjectReference Include="..\dk.lashout.LARPay.Infrastructure\dk.lashout.LARPay.Infrastructure.csproj" />
+    <ProjectReference Include="..\dk.lashout.LARPay.Core\dk.lashout.LARPay.Customer.csproj" />
+    <ProjectReference Include="..\dk.lashout.LARPay.Infrastructure\dk.lashout.LARPay.Archives.csproj" />
   </ItemGroup>
 
   <ItemGroup>

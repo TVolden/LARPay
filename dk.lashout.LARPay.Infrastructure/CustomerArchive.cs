@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace dk.lashout.LARPay.Infrastructure.Services
 {
-    public class CustomerRepository : ICustomerRepository
+    public class CustomerArchive : ICustomerRepository
     {
         private readonly Dictionary<Customer, int> repository;
 
-        public CustomerRepository()
+        public CustomerArchive()
         {
             repository = new Dictionary<Customer, int>();
         }
