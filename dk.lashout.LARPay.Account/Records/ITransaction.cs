@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace dk.lashout.LARPay.Core.Entities
+namespace dk.lashout.LARPay.Accountance.Records
 {
     public interface ITransaction
     {
-        ICustomer Linked { get; }
         string Description { get; }
-        double Amount { get; }
+        decimal Amount { get; }
         DateTime Date { get; }
     }
 }

@@ -5,9 +5,13 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dk.lashout.LARPay.Web", "LARPay\dk.lashout.LARPay.Web.csproj", "{C66D7D80-4C7B-4AFD-BA38-95289E0FAD21}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dk.lashout.LARPay.Core", "dk.lashout.LARPay.Core\dk.lashout.LARPay.Core.csproj", "{7E429092-A159-45BC-AFCD-E14BA44BF8BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dk.lashout.LARPay.Customer", "dk.lashout.LARPay.Core\dk.lashout.LARPay.Customer.csproj", "{7E429092-A159-45BC-AFCD-E14BA44BF8BD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dk.lashout.LARPay.Infrastructure", "dk.lashout.LARPay.Infrastructure\dk.lashout.LARPay.Infrastructure.csproj", "{30A2212B-AFC0-4AF5-A0C3-4D0192F69AE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dk.lashout.LARPay.Archives", "dk.lashout.LARPay.Infrastructure\dk.lashout.LARPay.Archives.csproj", "{30A2212B-AFC0-4AF5-A0C3-4D0192F69AE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dk.lashout.LARPay.Accountance", "dk.lashout.LARPay.Account\dk.lashout.LARPay.Accountance.csproj", "{980D91A1-8D51-438B-9E68-F5EECFEE440C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dk.lashout.LARPay.Clock", "dk.lashout.LARPay.Clock\dk.lashout.LARPay.Clock.csproj", "{1280F3E2-72C7-4B07-884B-DF1B72C6CAC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{30A2212B-AFC0-4AF5-A0C3-4D0192F69AE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30A2212B-AFC0-4AF5-A0C3-4D0192F69AE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30A2212B-AFC0-4AF5-A0C3-4D0192F69AE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{980D91A1-8D51-438B-9E68-F5EECFEE440C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{980D91A1-8D51-438B-9E68-F5EECFEE440C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{980D91A1-8D51-438B-9E68-F5EECFEE440C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{980D91A1-8D51-438B-9E68-F5EECFEE440C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1280F3E2-72C7-4B07-884B-DF1B72C6CAC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1280F3E2-72C7-4B07-884B-DF1B72C6CAC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1280F3E2-72C7-4B07-884B-DF1B72C6CAC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1280F3E2-72C7-4B07-884B-DF1B72C6CAC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

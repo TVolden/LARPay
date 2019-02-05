@@ -6,6 +6,7 @@
     <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\dk.lashout.LARPay.Core\dk.lashout.LARPay.Core.csproj" />
+    <ProjectReference Include="..\dk.lashout.LARPay.Account\dk.lashout.LARPay.Accountance.csproj" />
+    <ProjectReference Include="..\dk.lashout.LARPay.Core\dk.lashout.LARPay.Customer.csproj" />
   </ItemGroup>
 </Project>

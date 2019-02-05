@@ -1,6 +1,4 @@
 ﻿using System.Linq;
-using dk.lashout.LARPay.Core.Entities;
-using dk.lashout.LARPay.Core.Providers;
 using dk.lashout.LARPay.Core.Shared;
 
 namespace dk.lashout.LARPay.Core.Services

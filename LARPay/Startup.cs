@@ -45,7 +45,7 @@ namespace dk.lashout.LARPay
                 });
 
             services.AddSingleton<ITransactionRepository, TransactionRepository>();
-            services.AddSingleton<ICustomerRepository, CustomerRepository>();
+            services.AddSingleton<ICustomerRepository, CustomerArchive>();
             services.AddSingleton<IAccountService, AccountService>();
             services.AddSingleton<ICustomerService, CustomerService>();
             services.AddSingleton<IAccounts, Accounts>();
