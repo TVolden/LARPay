@@ -7,11 +7,13 @@ namespace dk.lashout.LARPay.Accounting.Service
 {
     public class AccountService : IBalance, IStatement, ITransfer
     {
+        private readonly IAccountChecker accountChecker;
         private readonly ITransactionRetreiver retreiver;
         private readonly ITransactionStorer storer;
 
-        public AccountService(ITransactionRetreiver retreiver, ITransactionStorer storer)
+        public AccountService(IAccountChecker accountChecker, ITransactionRetreiver retreiver, ITransactionStorer storer)
         {
+            this.accountChecker = accountChecker ?? throw new System.ArgumentNullException(nameof(accountChecker));
             this.retreiver = retreiver ?? throw new System.ArgumentNullException(nameof(retreiver));
             this.storer = storer ?? throw new System.ArgumentNullException(nameof(storer));
         }
@@ -28,8 +30,11 @@ namespace dk.lashout.LARPay.Accounting.Service
 
         public void Transfer(long fromAccount, long toAccount, decimal amount, string description)
         {
-            storer.SaveTransaction(fromAccount, -amount, description);
-            storer.SaveTransaction(toAccount, amount, description);
+            if (accountChecker.AccountExists(fromAccount) && accountChecker.AccountExists(toAccount))
+            {
+                storer.SaveTransaction(toAccount, amount, description);
+                storer.SaveTransaction(fromAccount, -amount, description);
+            }
         }
     }
 }

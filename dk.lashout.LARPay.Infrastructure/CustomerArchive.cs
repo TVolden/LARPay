@@ -1,10 +1,14 @@
-﻿using dk.lashout.LARPay.Core.Shared;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using dk.lashout.LARPay.Archives.Records;
+using dk.lashout.LARPay.CustomerService;
+using dk.lashout.LARPay.CustomerService.Clerks;
+using dk.lashout.LARPay.CustomerService.Forms;
+using dk.lashout.MaybeType;
 
-namespace dk.lashout.LARPay.Infrastructure.Services
+namespace dk.lashout.LARPay.Archives
 {
-    public class CustomerArchive : ICustomerRepository
+    public class CustomerArchive : ICustomerRetreiver, ILogin, ICustomerReceiver
     {
         private readonly Dictionary<Customer, int> repository;
 
@@ -13,18 +17,30 @@ namespace dk.lashout.LARPay.Infrastructure.Services
             repository = new Dictionary<Customer, int>();
         }
 
-        public bool Authenticate(Customer customer, int pincode)
+        public Maybe<ICustomer> GetCustomer(string identifier)
         {
-            return repository[customer].Equals(pincode);
+            var customer = getCustomer(identifier);
+            if (customer == null)
+                return new Maybe<ICustomer>(customer);
+            return new Maybe<ICustomer>();
         }
 
-        public Customer GetByIdentity(string identity)
+        private Customer getCustomer(string identifier)
         {
-            return repository.Keys.FirstOrDefault(customer => customer.Identity.Equals(identity));
+            return repository.Keys.FirstOrDefault(c => c.Identity.Equals(identifier));
         }
 
-        public void Insert(Customer customer, int pincode)
+        public bool Login(string identifier, int pincode)
         {
+            var customer = getCustomer(identifier);
+            if (customer != null)
+                return repository[customer].Equals(pincode);
+            return false;
+        }
+
+        public void SaveCustomer(string identifier, string name, int pincode)
+        {
+            var customer = new Customer(identifier, name);
             repository.Add(customer, pincode);
         }
     }

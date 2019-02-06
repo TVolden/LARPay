@@ -6,6 +6,6 @@
     <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Shared\Entities\" />
+    <ProjectReference Include="..\dk.lashout.MaybeType\dk.lashout.MaybeType.csproj" />
   </ItemGroup>
 </Project>

@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\dk.lashout.LARPay.Core\dk.lashout.LARPay.Customer.csproj" />
+    <ProjectReference Include="..\dk.lashout.LARPay.Core\dk.lashout.LARPay.CustomerService.csproj" />
     <ProjectReference Include="..\dk.lashout.LARPay.Infrastructure\dk.lashout.LARPay.Archives.csproj" />
   </ItemGroup>
 
