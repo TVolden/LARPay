@@ -2,8 +2,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using dk.lashout.LARPay.Core.Facades;
-using dk.lashout.LARPay.Core.Providers;
+using dk.lashout.LARPay.Clock;
+using dk.lashout.LARPay.CustomerService;
 using dk.lashout.LARPay.Web.Models;
 using dk.lashout.LARPay.Web.Results;
 using Microsoft.AspNetCore.Authorization;
@@ -15,13 +15,17 @@ namespace dk.lashout.LARPay.Web.Controllers
 {
     public class CustomerController : Controller
     {
-        private readonly ICustomers _customers;
+        private readonly ITimeProvider _timeprovider;
+        private readonly ICustomerCreator _creator;
+        private readonly ILogin _login;
         private readonly IConfiguration _configuration;
 
-        public CustomerController(ICustomers customers, IConfiguration configuration)
+        public CustomerController(ITimeProvider timeprovider, ICustomerCreator creator, ILogin login, IConfiguration configuration)
         {
-            _customers = customers;
-            _configuration = configuration;
+            _timeprovider = timeprovider ?? throw new ArgumentNullException(nameof(timeprovider));
+            _creator = creator ?? throw new ArgumentNullException(nameof(creator));
+            _login = login ?? throw new ArgumentNullException(nameof(login));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         public ActionResult Create()
@@ -36,7 +40,7 @@ namespace dk.lashout.LARPay.Web.Controllers
         [HttpPost]
         public ActionResult Create(CredentialsViewModel credentials)
         {
-            _customers.Create(credentials.Identity, credentials.Name, credentials.Pincode);
+            _creator.Create(credentials, credentials.Pincode);
             return Created($"/credentials/{credentials.Identity}", credentials);
         }
 
@@ -51,7 +55,7 @@ namespace dk.lashout.LARPay.Web.Controllers
         [HttpPost]
         public ActionResult Login(AuthenticateViewModel model)
         {
-            if (_customers.Login(model.Identity, model.Pincode))
+            if (_login.Login(model.Identity, model.Pincode))
             {
                 return Ok(CreateToken(model.Identity));
             }
@@ -69,7 +73,7 @@ namespace dk.lashout.LARPay.Web.Controllers
             var symmetricKey = Encoding.UTF8.GetBytes(_configuration["jwt:SecretKey"]);
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var now = TimeProvider.Current.UtcNow;
+            var now = _timeprovider.Now;
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]

@@ -3,17 +3,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using dk.lashout.LARPay.Web.Models;
 using System.Collections.Generic;
-using dk.lashout.LARPay.Core.Facades;
 
 namespace dk.lashout.LARPay.Web.Controllers
 {
     public class TransactionController : Controller
     {
-        private readonly IAccounts _accounts;
-
-        public TransactionController(IAccounts accounts)
+        public TransactionController(ICustomerFacade customerFacade)
         {
-            _accounts = accounts;
+
         }
 
         public IActionResult Create()
@@ -32,7 +29,7 @@ namespace dk.lashout.LARPay.Web.Controllers
         public IActionResult Create(TransactionViewModel model)
         {
             var sender = getCurrentUser();
-            _accounts.Transfer(sender, model.Recipient, model.Amount, model.Description);
+            _transfer(sender, model.Recipient, model.Amount, model.Description);
 
             return Ok();
         }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Text;
-using dk.lashout.LARPay.Core.Facades;
-using dk.lashout.LARPay.Core.Services;
-using dk.lashout.LARPay.Core.Shared;
-using dk.lashout.LARPay.Infrastructure.Services;
+using dk.lashout.LARPay.Archives;
+using dk.lashout.LARPay.CustomerService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -44,12 +42,10 @@ namespace dk.lashout.LARPay
                     };
                 });
 
-            services.AddSingleton<ITransactionRepository, TransactionRepository>();
-            services.AddSingleton<ICustomerRepository, CustomerArchive>();
-            services.AddSingleton<IAccountService, AccountService>();
-            services.AddSingleton<ICustomerService, CustomerService>();
-            services.AddSingleton<IAccounts, Accounts>();
-            services.AddSingleton<ICustomers, Customers>();
+            services.AddSingleton<ICustomerCreator, CustomerService.Service.CustomerService>();
+            services.AddSingleton<ILogin, CustomerArchive>();
+            services.AddSingleton<IAccountGetter, CustomerService>();
+
 
             services.AddMvc();
         }

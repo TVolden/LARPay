@@ -4,5 +4,6 @@
     {
         string Name { get; }
         string Identity { get; }
+        long? Account { get; }
     }
 }
