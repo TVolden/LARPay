@@ -1,4 +1,4 @@
-﻿namespace dk.lashout.LARPay.CustomerService
+﻿namespace dk.lashout.LARPay.Customers
 {
     public interface ILogin
     {

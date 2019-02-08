@@ -1,7 +1,14 @@
 ﻿using System;
 using System.Text;
+using dk.lashout.LARPay.Accounting;
+using dk.lashout.LARPay.Accounting.Clerks;
+using dk.lashout.LARPay.Accounting.Service;
 using dk.lashout.LARPay.Archives;
-using dk.lashout.LARPay.CustomerService;
+using dk.lashout.LARPay.Bank;
+using dk.lashout.LARPay.Clock;
+using dk.lashout.LARPay.Customers;
+using dk.lashout.LARPay.Customers.Clerks;
+using dk.lashout.LARPay.Customers.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,10 +49,21 @@ namespace dk.lashout.LARPay
                     };
                 });
 
-            services.AddSingleton<ICustomerCreator, CustomerService.Service.CustomerService>();
+            services.AddSingleton<ICustomerCreator, CustomerService>();
             services.AddSingleton<ILogin, CustomerArchive>();
             services.AddSingleton<IAccountGetter, CustomerService>();
-
+            services.AddSingleton<ITransfer, AccountService>();
+            services.AddSingleton<IStatement, AccountService>();
+            services.AddSingleton<IBalance, AccountService>();
+            services.AddSingleton<IAccountCreator, AccountArchiveService>();
+            services.AddSingleton<IAccountChecker, AccountArchiveService>();
+            services.AddSingleton<ITransactionRetreiver, AccountArchiveService>();
+            services.AddSingleton<ITransactionReceiver, AccountArchiveService>();
+            services.AddSingleton<ITimeProvider, UtcTime>();
+            services.AddSingleton<ICustomerReceiver, CustomerArchive>();
+            services.AddSingleton<ICustomerRetreiver, CustomerArchive>();
+            services.AddSingleton<IAccountFacade, AccountFacade>();
+            services.AddSingleton<ICustomerFacade, CustomerFacade>();
 
             services.AddMvc();
         }

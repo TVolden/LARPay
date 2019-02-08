@@ -1,7 +1,9 @@
-﻿namespace dk.lashout.LARPay.Accounting
+﻿using System;
+
+namespace dk.lashout.LARPay.Accounting
 {
     public interface ITransfer
     {
-        void Transfer(long fromAccount, long toAccount, decimal amount, string description);
+        void Transfer(Guid fromAccount, Guid toAccount, decimal amount, string description);
     }
 }

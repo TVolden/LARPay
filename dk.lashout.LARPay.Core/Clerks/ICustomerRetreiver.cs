@@ -1,7 +1,7 @@
-﻿using dk.lashout.LARPay.CustomerService.Forms;
+﻿using dk.lashout.LARPay.Customers.Forms;
 using dk.lashout.MaybeType;
 
-namespace dk.lashout.LARPay.CustomerService.Clerks
+namespace dk.lashout.LARPay.Customers.Clerks
 {
     public interface ICustomerRetreiver
     {

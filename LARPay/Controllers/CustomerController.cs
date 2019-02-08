@@ -2,8 +2,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using dk.lashout.LARPay.Bank;
 using dk.lashout.LARPay.Clock;
-using dk.lashout.LARPay.CustomerService;
+using dk.lashout.LARPay.Customers;
 using dk.lashout.LARPay.Web.Models;
 using dk.lashout.LARPay.Web.Results;
 using Microsoft.AspNetCore.Authorization;
@@ -16,14 +17,14 @@ namespace dk.lashout.LARPay.Web.Controllers
     public class CustomerController : Controller
     {
         private readonly ITimeProvider _timeprovider;
-        private readonly ICustomerCreator _creator;
+        private readonly ICustomerFacade _facade;
         private readonly ILogin _login;
         private readonly IConfiguration _configuration;
 
-        public CustomerController(ITimeProvider timeprovider, ICustomerCreator creator, ILogin login, IConfiguration configuration)
+        public CustomerController(ITimeProvider timeprovider, ICustomerFacade facade, ILogin login, IConfiguration configuration)
         {
             _timeprovider = timeprovider ?? throw new ArgumentNullException(nameof(timeprovider));
-            _creator = creator ?? throw new ArgumentNullException(nameof(creator));
+            _facade = facade ?? throw new ArgumentNullException(nameof(facade));
             _login = login ?? throw new ArgumentNullException(nameof(login));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
@@ -40,7 +41,7 @@ namespace dk.lashout.LARPay.Web.Controllers
         [HttpPost]
         public ActionResult Create(CredentialsViewModel credentials)
         {
-            _creator.Create(credentials, credentials.Pincode);
+            _facade.CreateCustomer(credentials.Identity, credentials.Name, credentials.Pincode);
             return Created($"/credentials/{credentials.Identity}", credentials);
         }
 

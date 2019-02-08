@@ -1,6 +1,6 @@
-﻿using dk.lashout.LARPay.CustomerService.Forms;
+﻿using dk.lashout.LARPay.Customers.Forms;
 
-namespace dk.lashout.LARPay.CustomerService
+namespace dk.lashout.LARPay.Customers
 {
     public interface ICustomerCreator
     {

@@ -1,38 +1,25 @@
-﻿using System.Collections.Generic;
-using dk.lashout.LARPay.Archives.Records;
-using dk.lashout.LARPay.Accounting.Clerks;
+﻿using System;
+using System.Collections.Generic;
 using dk.lashout.LARPay.Accounting.Forms;
-using dk.lashout.LARPay.Clock;
 
 namespace dk.lashout.LARPay.Archives
 {
-    public class TransactionRepository : ITransactionRetreiver, ITransactionStorer, IAccountChecker
+    class AccountArchive : IAccountArchive
     {
-        private readonly Dictionary<long, List<Transaction>> _accounts;
-        private readonly ITimeProvider timeProvider;
+        private readonly Dictionary<Guid, List<ITransaction>> _accounts;
 
-        public TransactionRepository(ITimeProvider timeProvider)
+        public AccountArchive()
         {
-            _accounts = new Dictionary<long, List<Transaction>>();
-            this.timeProvider = timeProvider ?? throw new System.ArgumentNullException(nameof(timeProvider));
+            _accounts = new Dictionary<Guid, List<ITransaction>>();
         }
 
-        public bool AccountExists(long account)
+        public IEnumerable<ITransaction> this[Guid account] => _accounts[account];
+
+        public void Add(Guid account)
         {
-            return _accounts.ContainsKey(account);
+            throw new NotImplementedException();
         }
 
-        public IEnumerable<ITransaction> GetTransactions(long account)
-        {
-            return _accounts.GetValueOrDefault(account);
-        }
-
-        public void SaveTransaction(long account, decimal amount, string description)
-        {
-            if (!_accounts.ContainsKey(account))
-                _accounts.Add(account, new List<Transaction>());
-
-            _accounts[account].Add(new Transaction(timeProvider.Now, amount, description));
-        }
+        public bool Contains(Guid account) => _accounts.ContainsKey(account);
     }
 }

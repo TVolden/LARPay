@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netstandard1.0</TargetFramework>
     <FileUpgradeFlags>40</FileUpgradeFlags>
     <UpgradeBackupLocation>C:\Users\vasev\Projekter\LARP tools\LARPay\Backup\dk.lashout.LARPay.Core\</UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>

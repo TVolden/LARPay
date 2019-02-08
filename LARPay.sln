@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dk.lashout.LARPay.Web", "LARPay\dk.lashout.LARPay.Web.csproj", "{C66D7D80-4C7B-4AFD-BA38-95289E0FAD21}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dk.lashout.LARPay.CustomerService", "dk.lashout.LARPay.Core\dk.lashout.LARPay.CustomerService.csproj", "{7E429092-A159-45BC-AFCD-E14BA44BF8BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dk.lashout.LARPay.Customers", "dk.lashout.LARPay.Core\dk.lashout.LARPay.Customers.csproj", "{7E429092-A159-45BC-AFCD-E14BA44BF8BD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dk.lashout.LARPay.Archives", "dk.lashout.LARPay.Infrastructure\dk.lashout.LARPay.Archives.csproj", "{30A2212B-AFC0-4AF5-A0C3-4D0192F69AE9}"
 EndProject
@@ -16,8 +16,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dk.lashout.MaybeType", "dk.lashout.MaybeType\dk.lashout.MaybeType.csproj", "{1BF6AD7B-C7E2-4AC0-AED8-AE2EAD496977}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backoffice", "Backoffice", "{B094B473-61E5-4F76-9B4D-71C838A8299E}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontoffice", "Frontoffice", "{D4721E57-8D2E-405E-B5E5-71628B99D3DC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dk.lashout.LARPay.Bank", "dk.lashout.LARPay.Bank\dk.lashout.LARPay.Bank.csproj", "{DDC7002E-3B20-4326-9BAF-3F577FC19379}"
 EndProject
@@ -64,7 +62,6 @@ Global
 		{30A2212B-AFC0-4AF5-A0C3-4D0192F69AE9} = {B094B473-61E5-4F76-9B4D-71C838A8299E}
 		{980D91A1-8D51-438B-9E68-F5EECFEE440C} = {B094B473-61E5-4F76-9B4D-71C838A8299E}
 		{1280F3E2-72C7-4B07-884B-DF1B72C6CAC1} = {B094B473-61E5-4F76-9B4D-71C838A8299E}
-		{DDC7002E-3B20-4326-9BAF-3F577FC19379} = {D4721E57-8D2E-405E-B5E5-71628B99D3DC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {02815161-6E91-42E1-AAE3-AEDF49224CC3}

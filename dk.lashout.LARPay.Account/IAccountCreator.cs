@@ -2,8 +2,8 @@
 
 namespace dk.lashout.LARPay.Accounting
 {
-    public interface IBalance
+    public interface IAccountCreator
     {
-        decimal Balance(Guid account);
+        void Create(Guid guid);
     }
 }

@@ -1,7 +1,9 @@
-﻿namespace dk.lashout.LARPay.Accounting.Clerks
+﻿using System;
+
+namespace dk.lashout.LARPay.Accounting.Clerks
 {
     public interface IAccountChecker
     {
-        bool AccountExists(long account);
+        bool AccountExists(Guid account);
     }
 }

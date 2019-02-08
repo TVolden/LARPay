@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using dk.lashout.LARPay.Archives.Records;
-using dk.lashout.LARPay.CustomerService;
-using dk.lashout.LARPay.CustomerService.Clerks;
-using dk.lashout.LARPay.CustomerService.Forms;
+using dk.lashout.LARPay.Customers.Clerks;
+using dk.lashout.LARPay.Customers.Forms;
+using dk.lashout.LARPay.Customers;
 using dk.lashout.MaybeType;
+using System;
 
 namespace dk.lashout.LARPay.Archives
 {
-    public class CustomerArchive : ICustomerRetreiver, ILogin, ICustomerReceiver
+    public class CustomerArchive : ICustomerRetreiver, ILogin, ICustomerReceiver, IAccountGetter
     {
         private readonly Dictionary<Customer, int> repository;
 
@@ -20,7 +21,7 @@ namespace dk.lashout.LARPay.Archives
         public Maybe<ICustomer> GetCustomer(string identifier)
         {
             var customer = getCustomer(identifier);
-            if (customer == null)
+            if (customer != null)
                 return new Maybe<ICustomer>(customer);
             return new Maybe<ICustomer>();
         }
@@ -38,10 +39,18 @@ namespace dk.lashout.LARPay.Archives
             return false;
         }
 
-        public void SaveCustomer(string identifier, string name, int pincode)
+        public void SaveCustomer(string identifier, string name, Guid account, int pincode)
         {
-            var customer = new Customer(identifier, name);
+            var customer = new Customer(identifier, name, account);
             repository.Add(customer, pincode);
+        }
+
+        public Maybe<Guid> GetAccount(string identifier)
+        {
+            var customer = getCustomer(identifier);
+            if (customer == null)
+                return new Maybe<Guid>();
+            return new Maybe<Guid>(customer.Account);
         }
     }
 }

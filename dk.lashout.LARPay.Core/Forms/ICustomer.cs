@@ -1,9 +1,11 @@
-﻿namespace dk.lashout.LARPay.CustomerService.Forms
+﻿using System;
+
+namespace dk.lashout.LARPay.Customers.Forms
 {
     public interface ICustomer
     {
         string Name { get; }
         string Identity { get; }
-        long? Account { get; }
+        Guid Account { get; }
     }
 }

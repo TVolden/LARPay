@@ -1,7 +1,9 @@
-﻿namespace dk.lashout.LARPay.CustomerService.Clerks
+﻿using System;
+
+namespace dk.lashout.LARPay.Customers.Clerks
 {
     public interface ICustomerReceiver
     {
-        void SaveCustomer(string identifier, string name, int pincode);
+        void SaveCustomer(string identifier, string name, Guid account, int pincode);
     }
 }

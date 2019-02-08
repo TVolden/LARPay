@@ -1,9 +1,10 @@
 ﻿using dk.lashout.MaybeType;
+using System;
 
-namespace dk.lashout.LARPay.CustomerService
+namespace dk.lashout.LARPay.Customers
 {
     public interface IAccountGetter
     {
-        Maybe<long> GetAccount(string identifier);
+        Maybe<Guid> GetAccount(string identifier);
     }
 }

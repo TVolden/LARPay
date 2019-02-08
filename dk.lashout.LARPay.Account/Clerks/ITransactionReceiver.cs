@@ -1,7 +1,9 @@
-﻿namespace dk.lashout.LARPay.Accounting.Clerks
+﻿using System;
+
+namespace dk.lashout.LARPay.Accounting.Clerks
 {
-    public interface ITransactionStorer
+    public interface ITransactionReceiver
     {
-        void SaveTransaction(long account, decimal amount, string description);
+        void SaveTransaction(Guid account, decimal amount, string description);
     }
 }

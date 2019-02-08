@@ -2,7 +2,7 @@
 
 namespace dk.lashout.LARPay.Clock
 {
-    public interface ITimeProvider
+    public  interface ITimeProvider
     {
         DateTime Now { get; }
     }

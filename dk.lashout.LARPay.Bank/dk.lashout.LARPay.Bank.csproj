@@ -1,7 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard1.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\dk.lashout.LARPay.Account\dk.lashout.LARPay.Accounting.csproj" />
+    <ProjectReference Include="..\dk.lashout.LARPay.Core\dk.lashout.LARPay.Customers.csproj" />
+  </ItemGroup>
 
 </Project>

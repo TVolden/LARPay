@@ -1,7 +1,7 @@
 ﻿namespace dk.lashout.LARPay.Bank
 {
-    interface ICustomerFacade
+    public interface ICustomerFacade
     {
-        void Transfer(string from, string receipant, decimal amount, string description);
+        void CreateCustomer(string identifier, string name, int pincode);
     }
 }
