@@ -9,7 +9,7 @@ using System;
 
 namespace dk.lashout.LARPay.Archives
 {
-    public class CustomerArchive : ICustomerRetreiver, ILogin, ICustomerReceiver, IAccountGetter
+    public class CustomerArchive : ICustomerRepository
     {
         private readonly Dictionary<Customer, int> repository;
 
@@ -31,14 +31,6 @@ namespace dk.lashout.LARPay.Archives
             return repository.Keys.FirstOrDefault(c => c.Identity.Equals(identifier));
         }
 
-        public bool Login(string identifier, int pincode)
-        {
-            var customer = getCustomer(identifier);
-            if (customer != null)
-                return repository[customer].Equals(pincode);
-            return false;
-        }
-
         public void SaveCustomer(string identifier, string name, Guid account, int pincode)
         {
             var customer = new Customer(identifier, name, account);
@@ -51,6 +43,22 @@ namespace dk.lashout.LARPay.Archives
             if (customer == null)
                 return new Maybe<Guid>();
             return new Maybe<Guid>(customer.Account);
+        }
+
+        public bool Authorize(string identifier, int pincode)
+        {
+            var customer = getCustomer(identifier);
+            if (customer != null)
+                return repository[customer].Equals(pincode);
+            return false;
+        }
+
+        public Maybe<ICustomer> GetCustomer(Guid account)
+        {
+            var customer = repository.Keys.SingleOrDefault(c => c.Account == account);
+            if (customer != null)
+                return new Maybe<ICustomer>(customer);
+            return new Maybe<ICustomer>();
         }
     }
 }

@@ -5,31 +5,42 @@ using System;
 
 namespace dk.lashout.LARPay.Customers.Service
 {
-    public class CustomerService : ICustomerCreator, IAccountGetter
+    public class CustomerService : ICustomerCreator, IAccountGetter, ILogin, ICustomerGetter
     {
-        private readonly ICustomerReceiver receiver;
-        private readonly ICustomerRetreiver retreiver;
+        private readonly ICustomerRepository _repository;
 
-        public CustomerService(ICustomerReceiver receiver, ICustomerRetreiver retreiver)
+        public CustomerService(ICustomerRepository repository)
         {
-            this.receiver = receiver ?? throw new System.ArgumentNullException(nameof(receiver));
-            this.retreiver = retreiver ?? throw new System.ArgumentNullException(nameof(retreiver));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         public void Create(ICustomer customer, int pincode)
         {
-            if (!retreiver.GetCustomer(customer.Identity).HasValue())
-                receiver.SaveCustomer(customer.Identity, customer.Name, customer.Account, pincode);
+            if (!_repository.GetCustomer(customer.Identity).HasValue())
+                _repository.SaveCustomer(customer.Identity, customer.Name, customer.Account, pincode);
         }
 
         public Maybe<Guid> GetAccount(string identifier)
         {
-            var customer = retreiver.GetCustomer(identifier);
-            if (customer.HasValue())
+            var customer = _repository.GetCustomer(identifier);
+            if (!customer.HasValue())
                 return new Maybe<Guid>();
 
             var account = customer.ValueOrDefault(null).Account;
             return new Maybe<Guid>(account);
+        }
+
+        public Maybe<string> GetCustomer(Guid account)
+        {
+            var customer = _repository.GetCustomer(account);
+            if (customer.HasValue())
+                return new Maybe<string>(customer.ValueOrDefault(null).Identity);
+            return new Maybe<string>();
+        }
+
+        public bool Login(string identifier, int pincode)
+        {
+            return _repository.Authorize(identifier, pincode);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace dk.lashout.LARPay.Bank
         {
             var account = Guid.NewGuid();
             _accountCreator.Create(account);
-            _customerCreator.Create(new ICustomerDTO(identifier, name, account), pincode);
+            _customerCreator.Create(new ICustomerDTO(name, identifier, account), pincode);
         }
     }
 }

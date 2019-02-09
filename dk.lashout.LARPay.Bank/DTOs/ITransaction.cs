@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace dk.lashout.LARPay.Accounting.Forms
+namespace dk.lashout.LARPay.Bank
 {
     public interface ITransaction
     {
-        Guid OtherAccount { get; }
-        string Description { get; }
         decimal Amount { get; }
+        string Description { get; }
+        string Recipient { get; }
         DateTime Date { get; }
     }
 }

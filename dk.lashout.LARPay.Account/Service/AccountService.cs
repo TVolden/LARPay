@@ -6,35 +6,41 @@ using System.Linq;
 
 namespace dk.lashout.LARPay.Accounting.Service
 {
-    public class AccountService : IBalance, IStatement, ITransfer
+    public class AccountService : IBalance, IStatement, ITransfer, IAccountCreator
     {
-        private readonly IAccountChecker accountChecker;
-        private readonly ITransactionRetreiver retreiver;
-        private readonly ITransactionReceiver storer;
+        private readonly IAccountRepository _repository;
 
-        public AccountService(IAccountChecker accountChecker, ITransactionRetreiver retreiver, ITransactionReceiver storer)
+        public AccountService(IAccountRepository repository)
         {
-            this.accountChecker = accountChecker ?? throw new System.ArgumentNullException(nameof(accountChecker));
-            this.retreiver = retreiver ?? throw new System.ArgumentNullException(nameof(retreiver));
-            this.storer = storer ?? throw new System.ArgumentNullException(nameof(storer));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         public decimal Balance(Guid account)
         {
-            return retreiver.GetTransactions(account).Sum(t => t.Amount);
+            if (_repository.AccountExists(account))
+                return _repository.GetTransactions(account).Sum(t => t.Amount);
+            return -1;
+        }
+
+        public void Create(Guid account)
+        {
+            if (!_repository.AccountExists(account))
+                _repository.CreateAccount(account);
         }
 
         public IEnumerable<ITransaction> Statement(Guid account)
         {
-            return retreiver.GetTransactions(account);
+            if (_repository.AccountExists(account))
+                return _repository.GetTransactions(account);
+            return new ITransaction[] { };
         }
 
         public void Transfer(Guid fromAccount, Guid toAccount, decimal amount, string description)
         {
-            if (accountChecker.AccountExists(fromAccount) && accountChecker.AccountExists(toAccount))
+            if (_repository.AccountExists(fromAccount) && _repository.AccountExists(toAccount))
             {
-                storer.SaveTransaction(toAccount, amount, description);
-                storer.SaveTransaction(fromAccount, -amount, description);
+                _repository.SaveTransaction(toAccount, fromAccount, amount, description);
+                _repository.SaveTransaction(fromAccount, toAccount, -amount, description);
             }
         }
     }
