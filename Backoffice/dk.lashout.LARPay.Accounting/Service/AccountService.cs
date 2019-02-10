@@ -24,8 +24,20 @@ namespace dk.lashout.LARPay.Accounting.Service
 
         public void Create(Guid account)
         {
-            if (!_repository.AccountExists(account))
+            if (_repository.AccountExists(account))
                 _repository.CreateAccount(account);
+        }
+
+        public Guid GenerateID()
+        {
+            Guid returnValue;
+            do
+            {
+                returnValue = Guid.NewGuid();
+            }
+            while (!_repository.AccountExists(returnValue));
+
+            return returnValue;
         }
 
         public IEnumerable<ITransaction> Statement(Guid account)

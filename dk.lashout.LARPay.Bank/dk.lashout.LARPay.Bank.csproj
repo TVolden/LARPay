@@ -2,11 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.0</TargetFramework>
+    <Authors>Thomas Volden</Authors>
+    <Company>Lashout</Company>
+    <Product>LARPay</Product>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\dk.lashout.LARPay.Account\dk.lashout.LARPay.Accounting.csproj" />
-    <ProjectReference Include="..\dk.lashout.LARPay.Core\dk.lashout.LARPay.Customers.csproj" />
+    <ProjectReference Include="..\Backoffice\dk.lashout.LARPay.Accounting\dk.lashout.LARPay.Accounting.csproj" />
+    <ProjectReference Include="..\Backoffice\dk.lashout.LARPay.Customers\dk.lashout.LARPay.Customers.csproj" />
   </ItemGroup>
 
 </Project>

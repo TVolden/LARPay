@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.0</TargetFramework>
+    <Authors>Thomas Volden</Authors>
+    <Company>Lashout</Company>
+    <Product>Clock</Product>
   </PropertyGroup>
 
 </Project>

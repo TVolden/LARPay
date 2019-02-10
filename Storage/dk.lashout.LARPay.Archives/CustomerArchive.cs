@@ -3,7 +3,6 @@ using System.Linq;
 using dk.lashout.LARPay.Archives.Records;
 using dk.lashout.LARPay.Customers.Clerks;
 using dk.lashout.LARPay.Customers.Forms;
-using dk.lashout.LARPay.Customers;
 using dk.lashout.MaybeType;
 using System;
 
@@ -28,7 +27,7 @@ namespace dk.lashout.LARPay.Archives
 
         private Customer getCustomer(string identifier)
         {
-            return repository.Keys.FirstOrDefault(c => c.Identity.Equals(identifier));
+            return repository.Keys.FirstOrDefault(c => c.Identifier.Equals(identifier));
         }
 
         public void SaveCustomer(string identifier, string name, Guid account, int pincode)

@@ -16,8 +16,13 @@ namespace dk.lashout.LARPay.Customers.Service
 
         public void Create(ICustomer customer, int pincode)
         {
-            if (!_repository.GetCustomer(customer.Identity).HasValue())
-                _repository.SaveCustomer(customer.Identity, customer.Name, customer.Account, pincode);
+            if (!_repository.GetCustomer(customer.Identifier).HasValue())
+                _repository.SaveCustomer(customer.Identifier, customer.Name, customer.Account, pincode);
+        }
+
+        public bool CustomerExists(string identifier)
+        {
+            return _repository.GetCustomer(identifier).HasValue();
         }
 
         public Maybe<Guid> GetAccount(string identifier)
@@ -34,7 +39,7 @@ namespace dk.lashout.LARPay.Customers.Service
         {
             var customer = _repository.GetCustomer(account);
             if (customer.HasValue())
-                return new Maybe<string>(customer.ValueOrDefault(null).Identity);
+                return new Maybe<string>(customer.ValueOrDefault(null).Identifier);
             return new Maybe<string>();
         }
 

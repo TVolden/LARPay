@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Authors>Thomas Volden</Authors>
+    <Company>Lashout</Company>
+    <Product>LARPay</Product>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,9 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Backoffice\dk.lashout.Clock\dk.lashout.Clock.csproj" />
     <ProjectReference Include="..\dk.lashout.LARPay.Bank\dk.lashout.LARPay.Bank.csproj" />
-    <ProjectReference Include="..\dk.lashout.LARPay.Core\dk.lashout.LARPay.Customers.csproj" />
-    <ProjectReference Include="..\dk.lashout.LARPay.Infrastructure\dk.lashout.LARPay.Archives.csproj" />
+    <ProjectReference Include="..\Storage\dk.lashout.LARPay.Archives\dk.lashout.LARPay.Archives.csproj" />
   </ItemGroup>
 
   <ItemGroup>

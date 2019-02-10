@@ -4,6 +4,9 @@
     <FileUpgradeFlags>40</FileUpgradeFlags>
     <UpgradeBackupLocation>C:\Users\vasev\Projekter\LARP tools\LARPay\Backup\dk.lashout.LARPay.Core\</UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <Authors>Thomas Volden</Authors>
+    <Company>Lashout</Company>
+    <Product>LARPay</Product>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\dk.lashout.MaybeType\dk.lashout.MaybeType.csproj" />

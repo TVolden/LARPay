@@ -1,5 +1,4 @@
 ﻿using dk.lashout.LARPay.Accounting;
-using dk.lashout.LARPay.Accounting.Forms;
 using dk.lashout.LARPay.Customers;
 using System;
 using System.Collections.Generic;
@@ -16,10 +15,10 @@ namespace dk.lashout.LARPay.Bank
 
         public AccountFacade(IAccountGetter accountGetter, ITransfer transfer, IBalance balance, IStatement statement, TransactionAdapterFactory transactionAdapterFactory)
         {
-            _accountGetter = accountGetter ?? throw new System.ArgumentNullException(nameof(accountGetter));
-            _transfer = transfer ?? throw new System.ArgumentNullException(nameof(transfer));
-            _balance = balance ?? throw new System.ArgumentNullException(nameof(balance));
-            _statement = statement ?? throw new System.ArgumentNullException(nameof(statement));
+            _accountGetter = accountGetter ?? throw new ArgumentNullException(nameof(accountGetter));
+            _transfer = transfer ?? throw new ArgumentNullException(nameof(transfer));
+            _balance = balance ?? throw new ArgumentNullException(nameof(balance));
+            _statement = statement ?? throw new ArgumentNullException(nameof(statement));
             _transactionAdapterFactory = transactionAdapterFactory ?? throw new ArgumentNullException(nameof(transactionAdapterFactory));
         }
 
