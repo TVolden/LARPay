@@ -19,12 +19,12 @@ namespace dk.lashout.LARPay.Accounting.Service
         {
             if (_repository.AccountExists(account))
                 return _repository.GetTransactions(account).Sum(t => t.Amount);
-            return -1;
+            return 0;
         }
 
         public void Create(Guid account)
         {
-            if (_repository.AccountExists(account))
+            if (!_repository.AccountExists(account))
                 _repository.CreateAccount(account);
         }
 
@@ -35,7 +35,7 @@ namespace dk.lashout.LARPay.Accounting.Service
             {
                 returnValue = Guid.NewGuid();
             }
-            while (!_repository.AccountExists(returnValue));
+            while (_repository.AccountExists(returnValue));
 
             return returnValue;
         }

@@ -23,9 +23,9 @@ namespace dk.lashout.LARPay.Archives
             return _accounts.ContainsKey(account);
         }
 
-        public void Create(Guid guid)
+        public void Create(Guid account)
         {
-            _accounts.Add(guid, new List<Transaction>());
+            _accounts.Add(account, new List<Transaction>());
         }
 
         public void CreateAccount(Guid account)
