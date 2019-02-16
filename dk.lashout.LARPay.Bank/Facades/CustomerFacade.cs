@@ -8,11 +8,13 @@ namespace dk.lashout.LARPay.Bank
     {
         private readonly ICustomerCreator _customerCreator;
         private readonly IAccountCreator _accountCreator;
+        private readonly ILogin _login;
 
-        public CustomerFacade(ICustomerCreator customerCreator, IAccountCreator accountCreator)
+        public CustomerFacade(ICustomerCreator customerCreator, IAccountCreator accountCreator, ILogin login)
         {
             _customerCreator = customerCreator ?? throw new ArgumentNullException(nameof(customerCreator));
             _accountCreator = accountCreator ?? throw new ArgumentNullException(nameof(accountCreator));
+            _login = login ?? throw new ArgumentNullException(nameof(login));
         }
 
         public void CreateCustomer(string identifier, string name, int pincode)
@@ -22,6 +24,11 @@ namespace dk.lashout.LARPay.Bank
             var account = _accountCreator.GenerateID();
             _customerCreator.Create(new ICustomerDTO(name, identifier, account), pincode);
             _accountCreator.Create(account);
+        }
+
+        public bool Login(string identity, int pincode)
+        {
+            return _login.Login(identity, pincode);
         }
     }
 }

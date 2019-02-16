@@ -3,5 +3,6 @@
     public interface ICustomerFacade
     {
         void CreateCustomer(string identifier, string name, int pincode);
+        bool Login(string identity, int pincode);
     }
 }

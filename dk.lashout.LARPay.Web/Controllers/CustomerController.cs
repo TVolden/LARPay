@@ -18,14 +18,12 @@ namespace dk.lashout.LARPay.Web.Controllers
     {
         private readonly ITimeProvider _timeprovider;
         private readonly ICustomerFacade _facade;
-        private readonly ILogin _login;
         private readonly IConfiguration _configuration;
 
-        public CustomerController(ITimeProvider timeprovider, ICustomerFacade facade, ILogin login, IConfiguration configuration)
+        public CustomerController(ITimeProvider timeprovider, ICustomerFacade facade, IConfiguration configuration)
         {
             _timeprovider = timeprovider ?? throw new ArgumentNullException(nameof(timeprovider));
             _facade = facade ?? throw new ArgumentNullException(nameof(facade));
-            _login = login ?? throw new ArgumentNullException(nameof(login));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
@@ -56,7 +54,7 @@ namespace dk.lashout.LARPay.Web.Controllers
         [HttpPost]
         public ActionResult Login(AuthenticateViewModel model)
         {
-            if (_login.Login(model.Identity, model.Pincode))
+            if (_facade.Login(model.Identity, model.Pincode))
             {
                 return Ok(CreateToken(model.Identity));
             }
