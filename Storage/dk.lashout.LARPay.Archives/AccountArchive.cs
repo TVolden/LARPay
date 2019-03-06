@@ -1,46 +1,36 @@
-﻿using System.Collections.Generic;
-using dk.lashout.LARPay.Archives.Records;
-using System;
-using dk.lashout.LARPay.Accounting.Clerks;
-using dk.lashout.LARPay.Clock;
+﻿using dk.lashout.LARPay.Accounting.Clerks;
 using dk.lashout.LARPay.Accounting.Forms;
+using dk.lashout.MaybeType;
+using System;
+using System.Collections.Generic;
 
-namespace dk.lashout.LARPay.Archives
+namespace dk.lashout.LARPay.Accounting.Applications
 {
-    public class AccountArchive : IAccountRepository
+    class Repository : IAccountRepository
     {
-        private readonly Dictionary<Guid, List<Transaction>> _accounts;
-        private readonly ITimeProvider timeProvider;
+        private readonly Dictionary<Guid, IAccount> _accounts;
 
-        public AccountArchive(ITimeProvider timeProvider)
+        public Repository()
         {
-            _accounts = new Dictionary<Guid, List<Transaction>>();
-            this.timeProvider = timeProvider ?? throw new System.ArgumentNullException(nameof(timeProvider));
+            _accounts = new Dictionary<Guid, IAccount>();
         }
 
-        public bool AccountExists(Guid account)
+        public void AddAccount(Guid id, IAccount account)
         {
-            return _accounts.ContainsKey(account);
+            if (!HasAccount(id))
+                _accounts.Add(id, account);
         }
 
-        public void Create(Guid account)
+        public bool HasAccount(Guid id)
         {
-            _accounts.Add(account, new List<Transaction>());
+            return _accounts.ContainsKey(id);
         }
 
-        public void CreateAccount(Guid account)
+        public Maybe<IAccount> GetAccount(Guid id)
         {
-            _accounts.Add(account, new List<Transaction>());
-        }
-
-        public IEnumerable<ITransaction> GetTransactions(Guid account)
-        {
-            return _accounts[account];
-        }
-
-        public void SaveTransaction(Guid account, Guid otherAccount, decimal amount, string description)
-        {
-            _accounts[account].Add(new Transaction(timeProvider.Now, otherAccount, amount, description));
+            if (HasAccount(id))
+                return new Maybe<IAccount>(_accounts[id]);
+            return new Maybe<IAccount>();
         }
     }
 }

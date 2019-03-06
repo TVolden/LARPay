@@ -2,6 +2,6 @@
 {
     public interface ILogin
     {
-        bool Login(string identity, int pincode);
+        bool Login(string username, string pincode);
     }
 }

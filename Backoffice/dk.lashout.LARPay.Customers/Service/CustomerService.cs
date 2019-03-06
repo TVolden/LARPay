@@ -5,7 +5,7 @@ using System;
 
 namespace dk.lashout.LARPay.Customers.Service
 {
-    public class CustomerService : ICustomerCreator, IAccountGetter, ILogin, ICustomerGetter
+    public class CustomerService : IRegister, IAccountGetter, ILogin, ICustomerGetter
     {
         private readonly ICustomerRepository _repository;
 

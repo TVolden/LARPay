@@ -1,14 +1,13 @@
-﻿using dk.lashout.LARPay.Accounting.Forms;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using dk.lashout.LARPay.Accounting.Forms;
+using dk.lashout.MaybeType;
 
 namespace dk.lashout.LARPay.Accounting.Clerks
 {
     public interface IAccountRepository
     {
-        bool AccountExists(Guid account);
-        IEnumerable<ITransaction> GetTransactions(Guid account);
-        void SaveTransaction(Guid account, Guid otherAccount, decimal amount, string description);
-        void CreateAccount(Guid account);
+        Maybe<IAccount> GetAccount(Guid accountID);
+        bool HasAccount(Guid accountID);
+        void AddAccount(Guid accountID, IAccount account);
     }
 }

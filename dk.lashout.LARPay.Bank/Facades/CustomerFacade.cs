@@ -6,11 +6,11 @@ namespace dk.lashout.LARPay.Bank
 {
     public class CustomerFacade : ICustomerFacade
     {
-        private readonly ICustomerCreator _customerCreator;
-        private readonly IAccountCreator _accountCreator;
+        private readonly IRegister _customerCreator;
+        private readonly IApply _accountCreator;
         private readonly ILogin _login;
 
-        public CustomerFacade(ICustomerCreator customerCreator, IAccountCreator accountCreator, ILogin login)
+        public CustomerFacade(IRegister customerCreator, IApply accountCreator, ILogin login)
         {
             _customerCreator = customerCreator ?? throw new ArgumentNullException(nameof(customerCreator));
             _accountCreator = accountCreator ?? throw new ArgumentNullException(nameof(accountCreator));

@@ -3,7 +3,7 @@ using dk.lashout.LARPay.Accounting.Forms;
 
 namespace dk.lashout.LARPay.Archives.Records
 {
-    class Transaction : ITransaction
+    class Transaction : Accounting.Forms.Transaction
     {
         public Transaction(DateTime date, Guid otherAccount, decimal amount, string description)
         {

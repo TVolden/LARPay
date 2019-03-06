@@ -49,18 +49,18 @@ namespace dk.lashout.LARPay
                     };
                 });
 
-            services.AddSingleton<ICustomerCreator, CustomerService>();
+            services.AddSingleton<IRegister, CustomerService>();
             services.AddSingleton<ILogin, CustomerService>();
             services.AddSingleton<IAccountGetter, CustomerService>();
             services.AddSingleton<ICustomerGetter, CustomerService>();
             services.AddSingleton<ITransfer, AccountService>();
             services.AddSingleton<IStatement, AccountService>();
             services.AddSingleton<IBalance, AccountService>();
-            services.AddSingleton<IAccountCreator, AccountService>();
+            services.AddSingleton<IApply, AccountService>();
             services.AddSingleton<ITimeProvider, UtcTime>();
             services.AddSingleton<IAccountFacade, AccountFacade>();
             services.AddSingleton<ICustomerFacade, CustomerFacade>();
-            services.AddSingleton<IAccountRepository, AccountArchive>();
+            services.AddSingleton<IFormFiler, AccountArchive>();
             services.AddSingleton<ICustomerRepository, CustomerArchive>();
             services.AddSingleton<TransactionAdapterFactory>();
 

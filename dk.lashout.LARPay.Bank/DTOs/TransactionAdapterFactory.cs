@@ -11,7 +11,7 @@ namespace dk.lashout.LARPay.Bank
             _customerGetter = customerGetter ?? throw new System.ArgumentNullException(nameof(customerGetter));
         }
 
-        public ITransaction CreateTransactionAdapter(Accounting.Forms.ITransaction transaction)
+        public ITransaction CreateTransactionAdapter(Accounting.Forms.Transaction transaction)
         {
             return new TransactionAdapter(_customerGetter, transaction);
         }
