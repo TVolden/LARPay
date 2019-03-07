@@ -4,13 +4,13 @@ using dk.lashout.MaybeType;
 using System;
 using System.Collections.Generic;
 
-namespace dk.lashout.LARPay.Accounting.Applications
+namespace dk.lashout.LARPay.Archives
 {
-    class Repository : IAccountRepository
+    public class AccountArchive : IAccountRepository
     {
         private readonly Dictionary<Guid, IAccount> _accounts;
 
-        public Repository()
+        public AccountArchive()
         {
             _accounts = new Dictionary<Guid, IAccount>();
         }

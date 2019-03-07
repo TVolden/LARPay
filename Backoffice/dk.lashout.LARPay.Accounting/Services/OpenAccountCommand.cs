@@ -7,13 +7,13 @@ namespace dk.lashout.LARPay.Accounting.Services
 {
     public class OpenAccountCommand : ICommand
     {
-        public Guid Account { get; }
-        public Guid Customer { get; }
+        public Guid AccountId { get; }
+        public Guid CustomerId { get; }
 
-        public OpenAccountCommand(Guid account, Guid customer)
+        public OpenAccountCommand(Guid accountId, Guid customerId)
         {
-            Account = account;
-            Customer = customer;
+            AccountId = accountId;
+            CustomerId = customerId;
         }
     }
 
@@ -28,11 +28,11 @@ namespace dk.lashout.LARPay.Accounting.Services
 
         public Result Handle(OpenAccountCommand command)
         {
-            if (_accountRepository.HasAccount(command.Account))
-                return new Result("Account already exists, try again with an other GUID");
+            if (_accountRepository.HasAccount(command.AccountId))
+                return new Result("AccountId already exists, try again with an other GUID");
 
-            var account = new Account(command.Customer);
-            _accountRepository.AddAccount(command.Account, account);
+            var account = new Account(command.CustomerId);
+            _accountRepository.AddAccount(command.AccountId, account);
             return new Result();
         }
     }

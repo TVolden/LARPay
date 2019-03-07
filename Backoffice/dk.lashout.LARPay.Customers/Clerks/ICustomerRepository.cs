@@ -6,9 +6,10 @@ namespace dk.lashout.LARPay.Customers.Clerks
 {
     public interface ICustomerRepository
     {
-        void SaveCustomer(string identifier, string name, Guid account, int pincode);
-        Maybe<ICustomer> GetCustomer(string identifier);
-        bool Authorize(string identifier, int pincode);
-        Maybe<ICustomer> GetCustomer(Guid account);
+        Maybe<Guid> GetCustomerId(string username);
+        Maybe<ICustomer> GetCustomer(Guid accountId);
+        bool HasCustomer(Guid accountId);
+        void AddCustomer(Guid accountId, ICustomer customer);
+        bool Authorize(string username, string pincode);
     }
 }

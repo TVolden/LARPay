@@ -2,7 +2,7 @@
 {
     public interface ICustomerFacade
     {
-        void CreateCustomer(string identifier, string name, int pincode);
-        bool Login(string identity, int pincode);
+        void CreateCustomer(string username, string name, string pincode);
+        bool Login(string username, string pincode);
     }
 }

@@ -1,34 +1,40 @@
-﻿using dk.lashout.LARPay.Accounting;
-using dk.lashout.LARPay.Customers;
+﻿using dk.lashout.LARPay.Accounting.Services;
+using dk.lashout.LARPay.Administration;
+using dk.lashout.LARPay.Customers.Service;
 using System;
 
 namespace dk.lashout.LARPay.Bank
 {
     public class CustomerFacade : ICustomerFacade
     {
-        private readonly IRegister _customerCreator;
-        private readonly IApply _accountCreator;
-        private readonly ILogin _login;
+        private readonly Messages _messages;
 
-        public CustomerFacade(IRegister customerCreator, IApply accountCreator, ILogin login)
+        public CustomerFacade(Messages messages)
         {
-            _customerCreator = customerCreator ?? throw new ArgumentNullException(nameof(customerCreator));
-            _accountCreator = accountCreator ?? throw new ArgumentNullException(nameof(accountCreator));
-            _login = login ?? throw new ArgumentNullException(nameof(login));
+            _messages = messages ?? throw new ArgumentNullException(nameof(messages));
         }
 
-        public void CreateCustomer(string identifier, string name, int pincode)
+        public void CreateCustomer(string username, string name, string pincode)
         {
-            if (_customerCreator.CustomerExists(identifier))
-                throw new IdentifierTakenException(identifier);
-            var account = _accountCreator.GenerateID();
-            _customerCreator.Create(new ICustomerDTO(name, identifier, account), pincode);
-            _accountCreator.Create(account);
+            if (!_messages.Dispatch(new IsUsernameAvailableQuery(username)))
+                throw new IdentifierTakenException(username);
+
+            var customerId = _messages.Dispatch(new GetAvailableCustomerIdQuery());
+            if (!_messages.Dispatch(new RegisterCustomerCommand(customerId, username, pincode, name)).Success)
+            {
+                throw new Exception("Unable to register customer");
+            }
+
+            var accountId = Guid.NewGuid(); //= _messages.Dispatch(new GetAvailableAccountIdQuery());
+            if (!_messages.Dispatch(new OpenAccountCommand(accountId, customerId)).Success)
+            {
+                throw new Exception("Unable to open account");
+            }
         }
 
-        public bool Login(string identity, int pincode)
+        public bool Login(string username, string pincode)
         {
-            return _login.Login(identity, pincode);
+            return _messages.Dispatch(new LoginQuery(username, pincode));
         }
     }
 }

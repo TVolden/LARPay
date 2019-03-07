@@ -4,14 +4,14 @@ namespace dk.lashout.LARPay.Administration
 {
     public sealed class Messages
     {
-        private readonly IServiceProvider provider;
+        private readonly IServiceProvider _provider;
 
         public Messages(IServiceProvider provider)
         {
-            this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
         }
 
-        public IResult Dispatch (ICommand command)
+        public Result Dispatch (ICommand command)
         {
             Type type = typeof(ICommandHandler<>);
             Type[] typeArgs = { command.GetType() };

@@ -36,7 +36,7 @@ namespace dk.lashout.LARPay.Accounting.Services
                 var account = maybeAccount.ValueOrDefault(null);
                 foreach (var transaction in account.GetTransactions())
                 {
-                    var visitor = _visitorFactory.CreateVisitor(account.Customer);
+                    var visitor = _visitorFactory.CreateVisitor(account.CustomerId);
                     yield return transaction.Accept(visitor);
                 }
             }

@@ -1,8 +1,5 @@
-﻿using dk.lashout.LARPay.Accounting.Service;
-using dk.lashout.LARPay.Archives;
+﻿using dk.lashout.LARPay.Archives;
 using dk.lashout.LARPay.Bank;
-using dk.lashout.LARPay.Clock;
-using dk.lashout.LARPay.Customers.Service;
 using NUnit.Framework;
 
 namespace dk.lashout.LARPay.Specifications.Drivers
@@ -14,18 +11,16 @@ namespace dk.lashout.LARPay.Specifications.Drivers
         public CustomerFacadeDriver()
         {
             var customerArchive = new CustomerArchive();
-            var accountArchive = new AccountArchive(new UtcTime());
-            var customerService = new CustomerService(customerArchive);
-            var accountService = new AccountService(accountArchive);
-            _customerFacade = new CustomerFacade(customerService, accountService, customerService);
+            var accountArchive = new AccountArchive();
+            _customerFacade = new CustomerFacade(null);
         }
 
-        public void CreateUser(string username, string name, int pincode)
+        public void CreateUser(string username, string name, string pincode)
         {
             _customerFacade.CreateCustomer(username, name, pincode);
         }
 
-        public void CanLogin(string username, int pincode)
+        public void CanLogin(string username, string pincode)
         {
             Assert.True(_customerFacade.Login(username, pincode));
         }

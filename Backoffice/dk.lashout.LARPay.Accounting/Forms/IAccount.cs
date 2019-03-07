@@ -5,7 +5,7 @@ namespace dk.lashout.LARPay.Accounting.Forms
 {
     public interface IAccount
     {
-        Guid Customer { get; }
+        Guid CustomerId { get; }
         void AddTransaction(Transaction transaction);
         IEnumerable<Transaction> GetTransactions();
     }

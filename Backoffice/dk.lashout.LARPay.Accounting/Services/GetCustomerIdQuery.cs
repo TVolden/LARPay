@@ -25,7 +25,7 @@ namespace dk.lashout.LARPay.Accounting.Services
 
         public Guid Handle(GetCustomerIdQuery query)
         {
-            return _accountRepository.GetAccount(query.Account).ValueOrDefault(null).Customer;
+            return _accountRepository.GetAccount(query.Account).ValueOrDefault(null).CustomerId;
         }
     }
 }

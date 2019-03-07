@@ -1,5 +1,4 @@
 ﻿using dk.lashout.LARPay.Specifications.Drivers;
-using NUnit.Framework;
 using TechTalk.SpecFlow;
 
 namespace dk.lashout.LARPay.Specifications.StepDefinitions
@@ -14,14 +13,14 @@ namespace dk.lashout.LARPay.Specifications.StepDefinitions
             _driver = new CustomerFacadeDriver();
         }
 
-        [When(@"I create a user with the username ""(.*)"", name ""(.*)"" and pincode (.*)")]
-        public void WhenICreateAUserWithTheUsernameNameAndPincode(string username, string name, int pincode)
+        [When(@"I create a user with the username ""(.*)"", name ""(.*)"" and pincode ""(.*)""")]
+        public void WhenICreateAUserWithTheUsernameNameAndPincode(string username, string name, string pincode)
         {
             _driver.CreateUser(username, name, pincode);
         }
 
-        [Then(@"I can login as ""(.*)"" using the pincode (.*)")]
-        public void ThenICanLoginAsUsingThePincode(string username, int pincode)
+        [Then(@"I can login as ""(.*)"" using the pincode ""(.*)""")]
+        public void ThenICanLoginAsUsingThePincode(string username, string pincode)
         {
             _driver.CanLogin(username, pincode);
         }

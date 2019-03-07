@@ -6,13 +6,13 @@ namespace dk.lashout.LARPay.Accounting.Applications
 {
     class Account : IAccount
     {
-        public Guid Customer { get; }
+        public Guid CustomerId { get; }
         private List<Transaction> passbook;
 
-        public Account(Guid customer)
+        public Account(Guid customerId)
         {
             passbook = new List<Transaction>();
-            Customer = customer;
+            CustomerId = customerId;
         }
 
         public void AddTransaction(Transaction transaction)
