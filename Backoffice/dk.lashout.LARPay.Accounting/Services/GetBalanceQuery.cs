@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace dk.lashout.LARPay.Accounting.Services
 {
-    public class GetBalanceQuery : IQuery<double>
+    public class GetBalanceQuery : IQuery<decimal>
     {
         public Guid Account { get; }
 
@@ -15,7 +15,7 @@ namespace dk.lashout.LARPay.Accounting.Services
         }
     }
 
-    sealed class GetBalanceQueryHandler : IQueryHandler<GetBalanceQuery, double>
+    public sealed class GetBalanceQueryHandler : IQueryHandler<GetBalanceQuery, decimal>
     {
         private readonly IAccountRepository _accountRepository;
 
@@ -24,7 +24,7 @@ namespace dk.lashout.LARPay.Accounting.Services
             _accountRepository = accountRepository;
         }
 
-        public double Handle(GetBalanceQuery query)
+        public decimal Handle(GetBalanceQuery query)
         {
             var account = _accountRepository.GetAccount(query.Account).ValueOrDefault(null);
             return account.GetTransactions().Sum(t => t.Amount);

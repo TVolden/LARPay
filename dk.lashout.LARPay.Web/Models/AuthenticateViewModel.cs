@@ -3,6 +3,6 @@
     public class AuthenticateViewModel
     {
         public string Identity { get; set; }
-        public int Pincode { get; set; }
+        public string Pincode { get; set; }
     }
 }

@@ -21,7 +21,7 @@ namespace dk.lashout.LARPay.Customers.Service
         }
     }
 
-    sealed class RegisterCustomerCommandHandler : ICommandHandler<RegisterCustomerCommand>
+    public sealed class RegisterCustomerCommandHandler : ICommandHandler<RegisterCustomerCommand>
     {
         private readonly ICustomerRepository _customerRepository;
 

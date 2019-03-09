@@ -78,9 +78,9 @@ namespace dk.lashout.LARPay.Specifications.Features
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 7
- testRunner.When("I create a user with the username \"a\", name \"a\" and pincode 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I create a user with the username \"a\", name \"a\" and pincode \"1\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 8
- testRunner.Then("I can login as \"a\" using the pincode 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("I can login as \"a\" using the pincode \"1\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

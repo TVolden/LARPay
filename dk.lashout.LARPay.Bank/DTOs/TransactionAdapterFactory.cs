@@ -1,19 +1,20 @@
-﻿using dk.lashout.LARPay.Customers;
+﻿using dk.lashout.LARPay.Accounting.Forms;
+using dk.lashout.LARPay.Administration;
 
 namespace dk.lashout.LARPay.Bank
 {
     public class TransactionAdapterFactory
     {
-        private readonly ICustomerGetter _customerGetter;
+        private readonly Messages _messages;
 
-        public TransactionAdapterFactory(ICustomerGetter customerGetter)
+        public TransactionAdapterFactory(Messages messages)
         {
-            _customerGetter = customerGetter ?? throw new System.ArgumentNullException(nameof(customerGetter));
+            _messages = messages ?? throw new System.ArgumentNullException(nameof(messages));
         }
 
-        public ITransaction CreateTransactionAdapter(Accounting.Forms.Transaction transaction)
+        public ITransaction CreateTransactionAdapter(TransferDto transferDto)
         {
-            return new TransactionAdapter(_customerGetter, transaction);
+            return new TransactionAdapter(_messages, transferDto);
         }
     }
 }

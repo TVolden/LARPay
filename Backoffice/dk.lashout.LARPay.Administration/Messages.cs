@@ -6,18 +6,18 @@ namespace dk.lashout.LARPay.Administration
     {
         private readonly IServiceProvider _provider;
 
-        public Messages(IServiceProvider provider)
+        public Messages(IServiceProvider serviceProvider)
         {
-            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            _provider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
 
         public Result Dispatch (ICommand command)
         {
-            Type type = typeof(ICommandHandler<>);
-            Type[] typeArgs = { command.GetType() };
-            Type handlerType = type.MakeGenericType(typeArgs);
+            Type commandHandlerType = typeof(ICommandHandler<>);
+            Type[] commandType = { command.GetType() };
+            Type genericHandlerType = commandHandlerType.MakeGenericType(commandType);
 
-            dynamic handler = _provider.GetService(handlerType);
+            dynamic handler = _provider.GetService(genericHandlerType);
             Result result = handler.Handle((dynamic)command);
 
             return result;
@@ -25,11 +25,11 @@ namespace dk.lashout.LARPay.Administration
 
         public T Dispatch<T>(IQuery<T> query)
         {
-            Type type = typeof(IQueryHandler<,>);
-            Type[] typeArgs = { query.GetType(), typeof(T) };
-            Type handlerType = type.MakeGenericType(typeArgs);
+            Type queryHandlerType = typeof(IQueryHandler<,>);
+            Type[] queryType = { query.GetType(), typeof(T) };
+            Type genericHandlerType = queryHandlerType.MakeGenericType(queryType);
 
-            dynamic handler = _provider.GetService(handlerType);
+            dynamic handler = _provider.GetService(genericHandlerType);
             T result = handler.Handle((dynamic)query);
 
             return result;

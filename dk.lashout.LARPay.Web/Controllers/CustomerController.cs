@@ -32,7 +32,7 @@ namespace dk.lashout.LARPay.Web.Controllers
             var returnValue = new CredentialsViewModel();
             returnValue.Name = "Full name";
             returnValue.Identity = "Login name";
-            returnValue.Pincode = 0000;
+            returnValue.Pincode = "0000";
             return Json(returnValue);
         }
 
@@ -47,7 +47,7 @@ namespace dk.lashout.LARPay.Web.Controllers
         {
             var returnValue = new AuthenticateViewModel();
             returnValue.Identity = "Login name";
-            returnValue.Pincode = 0000;
+            returnValue.Pincode = "0000";
             return Json(returnValue);
         }
 

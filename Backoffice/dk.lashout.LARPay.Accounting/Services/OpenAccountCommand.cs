@@ -17,7 +17,7 @@ namespace dk.lashout.LARPay.Accounting.Services
         }
     }
 
-    sealed class OpenAccountCommandHandler : ICommandHandler<OpenAccountCommand>
+    public sealed class OpenAccountCommandHandler : ICommandHandler<OpenAccountCommand>
     {
         private readonly IAccountRepository _accountRepository;
 

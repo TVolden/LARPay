@@ -17,7 +17,7 @@ namespace dk.lashout.LARPay.Accounting.Services
         }
     }
 
-    sealed class GetStatementQueryHandler : IQueryHandler<GetStatementQuery, IEnumerable<TransferDto>>
+    public sealed class GetStatementQueryHandler : IQueryHandler<GetStatementQuery, IEnumerable<TransferDto>>
     {
         private readonly IAccountRepository _accountRepository;
         private readonly TransferDtoVisitorFactory _visitorFactory;

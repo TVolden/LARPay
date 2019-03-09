@@ -4,26 +4,26 @@ using System;
 
 namespace dk.lashout.LARPay.Accounting.Services
 {
-    public class GetCustomerIdQuery : IQuery<Guid>
+    public class GetCustomerIdByAccountIdQuery : IQuery<Guid>
     {
         public Guid Account { get; }
 
-        public GetCustomerIdQuery(Guid account)
+        public GetCustomerIdByAccountIdQuery(Guid account)
         {
             Account = account;
         }
     }
 
-    sealed class GetCustomerIdQueryHandler : IQueryHandler<GetCustomerIdQuery, Guid>
+    public sealed class GetCustomerIdByAccountIdQueryHandler : IQueryHandler<GetCustomerIdByAccountIdQuery, Guid>
     {
         private readonly IAccountRepository _accountRepository;
 
-        public GetCustomerIdQueryHandler(IAccountRepository accountRepository)
+        public GetCustomerIdByAccountIdQueryHandler(IAccountRepository accountRepository)
         {
             _accountRepository = accountRepository;
         }
 
-        public Guid Handle(GetCustomerIdQuery query)
+        public Guid Handle(GetCustomerIdByAccountIdQuery query)
         {
             return _accountRepository.GetAccount(query.Account).ValueOrDefault(null).CustomerId;
         }

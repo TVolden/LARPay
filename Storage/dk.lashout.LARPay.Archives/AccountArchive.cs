@@ -15,10 +15,10 @@ namespace dk.lashout.LARPay.Archives
             _accounts = new Dictionary<Guid, IAccount>();
         }
 
-        public void AddAccount(Guid id, IAccount account)
+        public void AddAccount(Guid accountId, IAccount account)
         {
-            if (!HasAccount(id))
-                _accounts.Add(id, account);
+            if (!HasAccount(accountId))
+                _accounts.Add(accountId, account);
         }
 
         public bool HasAccount(Guid id)
@@ -26,11 +26,21 @@ namespace dk.lashout.LARPay.Archives
             return _accounts.ContainsKey(id);
         }
 
-        public Maybe<IAccount> GetAccount(Guid id)
+        public Maybe<IAccount> GetAccount(Guid accountId)
         {
-            if (HasAccount(id))
-                return new Maybe<IAccount>(_accounts[id]);
+            if (HasAccount(accountId))
+                return new Maybe<IAccount>(_accounts[accountId]);
             return new Maybe<IAccount>();
+        }
+
+        public Maybe<Guid> GetAccountId(Guid customerId)
+        {
+            foreach (var pair in _accounts)
+            {
+                if (pair.Value.CustomerId == customerId)
+                    return new Maybe<Guid>(pair.Key);
+            }
+            return new Maybe<Guid>();
         }
     }
 }

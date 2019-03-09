@@ -15,7 +15,7 @@ namespace dk.lashout.LARPay.Customers.Service
         }
     }
 
-    sealed class LoginQueryHandler : IQueryHandler<LoginQuery, bool>
+    public sealed class LoginQueryHandler : IQueryHandler<LoginQuery, bool>
     {
         private readonly ICustomerRepository customerRepository;
 

@@ -1,6 +1,8 @@
 ﻿using dk.lashout.LARPay.Accounting.Applications;
 using dk.lashout.LARPay.Accounting.Clerks;
+using dk.lashout.LARPay.Accounting.Forms;
 using dk.lashout.LARPay.Administration;
+using dk.lashout.LARPay.Clock;
 using System;
 
 namespace dk.lashout.LARPay.Accounting.Services
@@ -9,10 +11,10 @@ namespace dk.lashout.LARPay.Accounting.Services
     {
         public Guid Benefactor { get; }
         public Guid Recipient { get; }
-        public double Amount { get; }
+        public decimal Amount { get; }
         public string Description { get; }
 
-        public TransferMoneyCommand(Guid benefactor, Guid recipient, double amount, string description)
+        public TransferMoneyCommand(Guid benefactor, Guid recipient, decimal amount, string description)
         {
             Benefactor = benefactor;
             Recipient = recipient;
@@ -22,27 +24,51 @@ namespace dk.lashout.LARPay.Accounting.Services
 
     }
 
-    sealed class TransferMoneyCommandHandler : ICommandHandler<TransferMoneyCommand>
+    public sealed class TransferMoneyCommandHandler : ICommandHandler<TransferMoneyCommand>
     {
+        private readonly Messages _messages;
         private readonly IAccountRepository _accountRepository;
+        private readonly ITimeProvider _timeProvider;
 
-        public TransferMoneyCommandHandler(IAccountRepository accountRepository)
+        public TransferMoneyCommandHandler(Messages messages, IAccountRepository accountRepository, ITimeProvider timeProvider)
         {
+            _messages = messages ?? throw new ArgumentNullException(nameof(messages));
             _accountRepository = accountRepository;
+            _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
         }
 
         public Result Handle(TransferMoneyCommand command)
         {
-            var benefactor = _accountRepository.GetAccount(command.Benefactor).ValueOrDefault(null);
-            var recipient = _accountRepository.GetAccount(command.Recipient).ValueOrDefault(null);
+            try
+            {
+                var benefactor = GetAccount(command.Benefactor, "Benefactor");
+                var recipient = GetAccount(command.Recipient, "Recipient");
 
-            var debit = new Debit(command.Recipient, command.Amount, command.Description);
-            var credit = new Credit(command.Benefactor, command.Amount, command.Description);
+                //var balance = _messages.Dispatch(new GetBalanceQuery(command.Benefactor));
+                //if (balance < command.Amount)
+                //    return new Result("Amount exceeds account balance.");
 
-            benefactor.AddTransaction(debit);
-            recipient.AddTransaction(credit);
+                var transferDate = _timeProvider.Now;
 
+                var debit = new Debit(command.Recipient, command.Amount, command.Description, transferDate);
+                var credit = new Credit(command.Benefactor, command.Amount, command.Description, transferDate);
+
+                benefactor.AddTransaction(debit);
+                recipient.AddTransaction(credit);
+            }
+            catch (Exception ex)
+            {
+                return new Result(ex.Message);
+            }
             return new Result();
+        }
+
+        private IAccount GetAccount(Guid accountId, string who)
+        {
+            var maybeAccount = _accountRepository.GetAccount(accountId);
+            if (!maybeAccount.HasValue())
+                throw new Exception(string.Format("{0} account not found.", who));
+            return maybeAccount.ValueOrDefault(null);
         }
     }
 }

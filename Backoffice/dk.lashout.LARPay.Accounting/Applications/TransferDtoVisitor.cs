@@ -5,7 +5,7 @@ using System;
 
 namespace dk.lashout.LARPay.Accounting.Applications
 {
-    class TransferDtoVisitor : ITransferVisitor<TransferDto>
+    public class TransferDtoVisitor : ITransferVisitor<TransferDto>
     {
         private readonly Messages _messages;
         private readonly Guid _accountCustomerId;
@@ -18,14 +18,14 @@ namespace dk.lashout.LARPay.Accounting.Applications
 
         public TransferDto Visit(Debit debit)
         {
-            var customerId = _messages.Dispatch(new GetCustomerIdQuery(debit.Recipient));
-            return new TransferDto(_accountCustomerId, customerId, debit.Amount, debit.Description);
+            var customerId = _messages.Dispatch(new GetCustomerIdByAccountIdQuery(debit.Recipient));
+            return new TransferDto(_accountCustomerId, customerId, debit.Amount, debit.Description, debit.Date);
         }
 
-        public TransferDto Visit(Credit debit)
+        public TransferDto Visit(Credit credit)
         {
-            var customerId = _messages.Dispatch(new GetCustomerIdQuery(debit.Benefactor));
-            return new TransferDto(customerId, _accountCustomerId, debit.Amount, debit.Description);
+            var customerId = _messages.Dispatch(new GetCustomerIdByAccountIdQuery(credit.Benefactor));
+            return new TransferDto(customerId, _accountCustomerId, credit.Amount, credit.Description, credit.Date);
         }
     }
 }

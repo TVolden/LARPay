@@ -15,7 +15,7 @@ namespace dk.lashout.LARPay.Customers.Service
         }
     }
 
-    sealed class GetCustomerQueryHandler : IQueryHandler<GetCustomerQuery, Maybe<CustomerDto>>
+    public sealed class GetCustomerQueryHandler : IQueryHandler<GetCustomerQuery, Maybe<CustomerDto>>
     {
         private readonly ICustomerRepository _customerRepository;
 

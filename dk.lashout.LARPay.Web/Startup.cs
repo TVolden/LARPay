@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
-using dk.lashout.LARPay.Accounting;
+using dk.lashout.LARPay.Accounting.Applications;
 using dk.lashout.LARPay.Accounting.Clerks;
-using dk.lashout.LARPay.Accounting.Service;
+using dk.lashout.LARPay.Accounting.Forms;
+using dk.lashout.LARPay.Accounting.Services;
+using dk.lashout.LARPay.Administration;
 using dk.lashout.LARPay.Archives;
 using dk.lashout.LARPay.Bank;
 using dk.lashout.LARPay.Clock;
-using dk.lashout.LARPay.Customers;
 using dk.lashout.LARPay.Customers.Clerks;
 using dk.lashout.LARPay.Customers.Service;
+using dk.lashout.MaybeType;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -49,21 +52,32 @@ namespace dk.lashout.LARPay
                     };
                 });
 
-            services.AddSingleton<IRegister, CustomerService>();
-            services.AddSingleton<ILogin, CustomerService>();
-            services.AddSingleton<IAccountGetter, CustomerService>();
-            services.AddSingleton<ICustomerGetter, CustomerService>();
-            services.AddSingleton<ITransfer, AccountService>();
-            services.AddSingleton<IStatement, AccountService>();
-            services.AddSingleton<IBalance, AccountService>();
-            services.AddSingleton<IApply, AccountService>();
+            services.AddSingleton<Messages>();
+
+            services.AddSingleton<IAccountRepository, AccountArchive>();
+            services.AddSingleton<ICustomerRepository, CustomerArchive>();
+
+            services.AddSingleton<IQueryHandler<GetBalanceQuery, decimal>, GetBalanceQueryHandler>();
+            services.AddSingleton<IQueryHandler<GetAccountIdByCustomerIdQuery, Maybe<Guid>>, GetAccountIdByCustomerIdQueryHandler>();
+            services.AddSingleton<IQueryHandler<GetCustomerIdByAccountIdQuery, Guid>, GetCustomerIdByAccountIdQueryHandler>();
+            services.AddSingleton<IQueryHandler<GetStatementQuery, IEnumerable<TransferDto>>, GetStatementQueryHandler>();
+            services.AddSingleton<IQueryHandler<GetAvailableCustomerIdQuery, Guid>, GetAvailableCustomerIdQueryHandler> ();
+            services.AddSingleton<IQueryHandler<GetCustomerIdByUsernameQuery, Maybe<Guid>>, GetCustomerIdByUsernameQueryHandler> ();
+            services.AddSingleton<IQueryHandler<GetCustomerQuery, Maybe<CustomerDto>>, GetCustomerQueryHandler> ();
+            services.AddSingleton<IQueryHandler<GetUsernameByCustomerIdQuery, Maybe<string>>, GetUsernameByCustomerIdQueryHandler> ();
+            services.AddSingleton<IQueryHandler<IsUsernameAvailableQuery, bool>, IsUsernameAvailableQueryHandler> ();
+            services.AddSingleton<IQueryHandler<LoginQuery, bool>, LoginQueryHandler> ();
+
+            services.AddSingleton<ICommandHandler<OpenAccountCommand>, OpenAccountCommandHandler>();
+            services.AddSingleton<ICommandHandler<TransferMoneyCommand>, TransferMoneyCommandHandler>();
+            services.AddSingleton<ICommandHandler<RegisterCustomerCommand>, RegisterCustomerCommandHandler> ();
+
             services.AddSingleton<ITimeProvider, UtcTime>();
             services.AddSingleton<IAccountFacade, AccountFacade>();
             services.AddSingleton<ICustomerFacade, CustomerFacade>();
-            services.AddSingleton<IFormFiler, AccountArchive>();
             services.AddSingleton<ICustomerRepository, CustomerArchive>();
+            services.AddSingleton<TransferDtoVisitorFactory>();
             services.AddSingleton<TransactionAdapterFactory>();
-
             services.AddMvc();
         }
 

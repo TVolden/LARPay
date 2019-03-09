@@ -13,7 +13,7 @@ namespace dk.lashout.LARPay.Customers.Service
         }
     }
 
-    sealed class IsUsernameAvailableQueryHandler : IQueryHandler<IsUsernameAvailableQuery, bool>
+    public sealed class IsUsernameAvailableQueryHandler : IQueryHandler<IsUsernameAvailableQuery, bool>
     {
         private readonly ICustomerRepository _customerRepository;
 

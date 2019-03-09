@@ -3,7 +3,7 @@ using System;
 
 namespace dk.lashout.LARPay.Accounting.Applications
 {
-    class TransferDtoVisitorFactory
+    public class TransferDtoVisitorFactory
     {
         private readonly Messages _messages;
 

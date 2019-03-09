@@ -6,7 +6,7 @@ namespace dk.lashout.LARPay.Customers.Service
 {
     public class GetAvailableCustomerIdQuery : IQuery<Guid> { }
 
-    sealed class GetAvailableCustomerIdQueryHandler : IQueryHandler<GetAvailableCustomerIdQuery, Guid>
+    public sealed class GetAvailableCustomerIdQueryHandler : IQueryHandler<GetAvailableCustomerIdQuery, Guid>
     {
         private readonly ICustomerRepository _customerRepository;
 

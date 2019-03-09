@@ -3,17 +3,13 @@ using System;
 
 namespace dk.lashout.LARPay.Accounting.Applications
 {
-    class Credit : Transaction
+    public class Credit : Transaction
     {
         public Guid Benefactor { get; }
-        public string Description { get; }
-        public double Amount { get; }
 
-        public Credit(Guid benefactor, double amount, string description)
+        public Credit(Guid benefactor, decimal amount, string description, DateTime date) : base(amount, description, date)
         {
             Benefactor = benefactor;
-            Amount = amount;
-            Description = description;
         }
     }
 }

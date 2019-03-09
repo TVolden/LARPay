@@ -2,7 +2,7 @@
 {
     public sealed class Result
     {
-        private string ErrorMessage { get; }
+        public string ErrorMessage { get; }
 
         public bool Success => ErrorMessage == null;
 
