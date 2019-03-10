@@ -1,6 +1,5 @@
 ﻿using dk.lashout.LARPay.Archives;
 using dk.lashout.LARPay.Bank;
-using NUnit.Framework;
 
 namespace dk.lashout.LARPay.Specifications.Drivers
 {
