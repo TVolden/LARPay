@@ -30,13 +30,13 @@ namespace dk.lashout.LARPay.Bank
             return accountId.ValueOrDefault(Guid.Empty);
         }
 
-        public decimal Balance(string username)
+        public decimal GetBalance(string username)
         {
             var account = getAccount(username);
             return _messages.Dispatch(new GetBalanceQuery(account));
         }
 
-        public IEnumerable<ITransaction> Statement(string username)
+        public IEnumerable<ITransaction> GetStatement(string username)
         {
             var account = getAccount(username);
             var transactions = _messages.Dispatch(new GetStatementQuery(account));
@@ -46,15 +46,24 @@ namespace dk.lashout.LARPay.Bank
             }
         }
 
-        public void Transfer(string from, string receipant, decimal amount, string description)
+        public decimal GetCreditLimit(string username)
+        {
+            var account = getAccount(username);
+            return _messages.Dispatch(new GetCreditLimitForAccountIdQuery(account));
+        }
+
+        public Result SetCreditLimit(string username, decimal creditLimit)
+        {
+            var account = getAccount(username);
+            return _messages.Dispatch(new SetCreditLimitForAccountIdCommand(account, creditLimit));
+        }
+
+        public Result Transfer(string from, string receipant, decimal amount, string description)
         {
             var fromAccount = getAccount(from);
             var toAccount = getAccount(receipant);
 
-            var result = _messages.Dispatch(new TransferMoneyCommand(fromAccount, toAccount, amount, description));
-
-            if (!result.Success)
-                throw new Exception(result.ErrorMessage);
+            return _messages.Dispatch(new TransferMoneyCommand(fromAccount, toAccount, amount, description));
         }
     }
 }

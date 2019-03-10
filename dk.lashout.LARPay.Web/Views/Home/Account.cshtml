@@ -41,6 +41,14 @@
     <button type="submit" class="btn btn-primary">Transfer</button>
 </form>
 
+<form id="creditLimit_form">
+    <div class="form-group">
+        <label for="inputCreditLimit">Credit limit</label>
+        <input type="number" min="0" class="form-control" id="inputCreditLimit" placeholder="" />
+    </div>
+    <button type="submit" class="btn btn-primary">Set credit limit</button>
+</form>
+
 @section Scripts
 {
     <script>
@@ -48,7 +56,7 @@
 
             $.ajax({
                 type: "GET",
-                url: '/transaction/index',
+                url: '/account/balance',
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Authorization", 'Bearer ' + sessionStorage.token);
                 }
@@ -58,7 +66,7 @@
 
             $.ajax({
                 type: "GET",
-                url: '/transaction/list',
+                url: '/account/statement',
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Authorization", 'Bearer ' + sessionStorage.token);
                 }
@@ -69,7 +77,7 @@
             });
 
             var transfer_application;
-            $.getJSON('/transaction/create',
+            $.getJSON('/account/transfer',
                 function(data) {
                     transfer_application = data;
                     $('#inputRecipient').attr('placeholder', data.recipient);
@@ -86,6 +94,13 @@
                     return false;
                 });
 
+            $('#creditLimit_form').on('submit',
+                function () {
+                    var creditLimit = $('#inputCreditLimit').val();
+                    setCreditLimit(creditLimit);
+                    return false;
+                })
+
             function transfer(recipient, amount, description) {
 
                 var transaction_request = jQuery.extend({}, transfer_application);
@@ -95,7 +110,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: '/transaction/create',
+                    url: '/account/transfer',
                     data: transaction_request,
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader("Authorization", 'Bearer ' + sessionStorage.token);
@@ -103,6 +118,17 @@
                 }).done(function(response) {
                     location.reload();
                 });
+            }
+
+            function setCreditLimit(creditLimit) {
+                $.ajax({
+                    type: "POST",
+                    url: '/account/creditlimit',
+                    data: { 'creditLimit': creditLimit},
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Authorization", 'Bearer ' + sessionStorage.token);
+                    }
+                })
             }
         });
     </script>

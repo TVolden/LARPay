@@ -2,7 +2,7 @@
 {
     public class AuthenticateViewModel
     {
-        public string Identity { get; set; }
+        public string Username { get; set; }
         public string Pincode { get; set; }
     }
 }

@@ -14,22 +14,22 @@ namespace dk.lashout.LARPay.Bank
             _messages = messages ?? throw new ArgumentNullException(nameof(messages));
         }
 
-        public void CreateCustomer(string username, string name, string pincode)
+        public Result CreateCustomer(string username, string name, string pincode)
         {
             if (!_messages.Dispatch(new IsUsernameAvailableQuery(username)))
-                throw new IdentifierTakenException(username);
+                return new Result("Username not available, try an other");
 
             var customerId = _messages.Dispatch(new GetAvailableCustomerIdQuery());
-            if (!_messages.Dispatch(new RegisterCustomerCommand(customerId, username, pincode, name)).Success)
-            {
-                throw new Exception("Unable to register customer");
-            }
+            var result = _messages.Dispatch(new RegisterCustomerCommand(customerId, username, pincode, name));
+            if (!result.Success)
+                return result;
 
-            var accountId = Guid.NewGuid(); //= _messages.Dispatch(new GetAvailableAccountIdQuery());
-            if (!_messages.Dispatch(new OpenAccountCommand(accountId, customerId)).Success)
-            {
-                throw new Exception("Unable to open account");
-            }
+            var accountId = _messages.Dispatch(new GetAvailableAccountIdQuery());
+            result = _messages.Dispatch(new OpenAccountCommand(accountId, customerId));
+            if (!result.Success)
+                return result;
+
+            return new Result();
         }
 
         public bool Login(string username, string pincode)

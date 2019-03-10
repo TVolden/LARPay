@@ -43,10 +43,10 @@ namespace dk.lashout.LARPay.Accounting.Services
             {
                 var benefactor = GetAccount(command.Benefactor, "Benefactor");
                 var recipient = GetAccount(command.Recipient, "Recipient");
-
-                //var balance = _messages.Dispatch(new GetBalanceQuery(command.Benefactor));
-                //if (balance < command.Amount)
-                //    return new Result("Amount exceeds account balance.");
+                
+                var balance = _messages.Dispatch(new GetBalanceQuery(command.Benefactor));
+                if (balance + benefactor.creditLimit < command.Amount)
+                    return new Result("Amount exceeds account balance.");
 
                 var transferDate = _timeProvider.Now;
 

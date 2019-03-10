@@ -1,8 +1,10 @@
-﻿namespace dk.lashout.LARPay.Bank
+﻿using dk.lashout.LARPay.Administration;
+
+namespace dk.lashout.LARPay.Bank
 {
     public interface ICustomerFacade
     {
-        void CreateCustomer(string username, string name, string pincode);
+        Result CreateCustomer(string username, string name, string pincode);
         bool Login(string username, string pincode);
     }
 }

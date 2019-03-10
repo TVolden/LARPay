@@ -1,9 +1,9 @@
 ﻿namespace dk.lashout.LARPay.Web.Models
 {
-    public class CredentialsViewModel
+    public class CustomerViewModel
     {
         public string Name { get; set; }
-        public string Identity { get; set; }
+        public string Username { get; set; }
         public string Pincode { get; set; }
     }
 }

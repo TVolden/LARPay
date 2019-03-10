@@ -4,7 +4,6 @@ using System.Security.Claims;
 using System.Text;
 using dk.lashout.LARPay.Bank;
 using dk.lashout.LARPay.Clock;
-using dk.lashout.LARPay.Customers;
 using dk.lashout.LARPay.Web.Models;
 using dk.lashout.LARPay.Web.Results;
 using Microsoft.AspNetCore.Authorization;
@@ -27,26 +26,28 @@ namespace dk.lashout.LARPay.Web.Controllers
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        public ActionResult Create()
+        public ActionResult Register()
         {
-            var returnValue = new CredentialsViewModel();
-            returnValue.Name = "Full name";
-            returnValue.Identity = "Login name";
+            var returnValue = new CustomerViewModel();
+            returnValue.Name = "Character name";
+            returnValue.Username = "Username";
             returnValue.Pincode = "0000";
             return Json(returnValue);
         }
 
         [HttpPost]
-        public ActionResult Create(CredentialsViewModel credentials)
+        public ActionResult Register(CustomerViewModel customer)
         {
-            _facade.CreateCustomer(credentials.Identity, credentials.Name, credentials.Pincode);
-            return Created($"/credentials/{credentials.Identity}", credentials);
+            var result = _facade.CreateCustomer(customer.Username, customer.Name, customer.Pincode);
+            if (result.Success)
+                return Created($"/credentials/{customer.Username}", customer);
+            return BadRequest(result.ErrorMessage);
         }
 
         public ActionResult Login()
         {
             var returnValue = new AuthenticateViewModel();
-            returnValue.Identity = "Login name";
+            returnValue.Username = "Login name";
             returnValue.Pincode = "0000";
             return Json(returnValue);
         }
@@ -54,9 +55,9 @@ namespace dk.lashout.LARPay.Web.Controllers
         [HttpPost]
         public ActionResult Login(AuthenticateViewModel model)
         {
-            if (_facade.Login(model.Identity, model.Pincode))
+            if (_facade.Login(model.Username, model.Pincode))
             {
-                return Ok(CreateToken(model.Identity));
+                return Ok(CreateToken(model.Username));
             }
             return new UnauthorizedWithChallengeResult("Bearer realm=\"jwt\"");
         }

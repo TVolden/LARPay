@@ -24,7 +24,7 @@
             $.getJSON('/customer/login',
                 function(data) {
                     login_application = data;
-                    $('#inputIdentity').attr('placeholder', data.identity);
+                    $('#inputIdentity').attr('placeholder', data.username);
                     $('#inputPincode').attr('placeholder', data.pincode);
                 });
 
@@ -36,7 +36,7 @@
 
             function login(identity, pincode) {
                 login_request = jQuery.extend({}, login_application);
-                login_request.identity = identity;
+                login_request.username = identity;
                 login_request.pincode = pincode;
                 $.post('/customer/login',
                     login_request,

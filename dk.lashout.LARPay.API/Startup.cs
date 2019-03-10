@@ -15,25 +15,26 @@ using dk.lashout.MaybeType;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace dk.lashout.LARPay
+namespace dk.lashout.LARPay.API
 {
     public class Startup
     {
-        private readonly IConfiguration _configuration;
-
         public Startup(IConfiguration configuration)
         {
-            _configuration = configuration;
+            Configuration = configuration;
         }
+
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var secretKey = Encoding.UTF8.GetBytes(_configuration["jwt:SecretKey"]);
+            var secretKey = Encoding.UTF8.GetBytes(Configuration["jwt:SecretKey"]);
 
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -44,8 +45,8 @@ namespace dk.lashout.LARPay
                     options.TokenValidationParameters = new TokenValidationParameters()
                     {
                         IssuerSigningKey = new SymmetricSecurityKey(secretKey),
-                        ValidAudience = _configuration["jwt:Audience"],
-                        ValidIssuer = _configuration["jwt:Issuer"],
+                        ValidAudience = Configuration["jwt:Audience"],
+                        ValidIssuer = Configuration["jwt:Issuer"],
                         ValidateIssuerSigningKey = true,
                         ValidateLifetime = true,
                         ClockSkew = TimeSpan.FromMinutes(0)
@@ -61,26 +62,26 @@ namespace dk.lashout.LARPay
             services.AddSingleton<IQueryHandler<GetAccountIdByCustomerIdQuery, Maybe<Guid>>, GetAccountIdByCustomerIdQueryHandler>();
             services.AddSingleton<IQueryHandler<GetCustomerIdByAccountIdQuery, Guid>, GetCustomerIdByAccountIdQueryHandler>();
             services.AddSingleton<IQueryHandler<GetStatementQuery, IEnumerable<TransferDto>>, GetStatementQueryHandler>();
-            services.AddSingleton<IQueryHandler<GetAvailableCustomerIdQuery, Guid>, GetAvailableCustomerIdQueryHandler> ();
-            services.AddSingleton<IQueryHandler<GetCustomerIdByUsernameQuery, Maybe<Guid>>, GetCustomerIdByUsernameQueryHandler> ();
-            services.AddSingleton<IQueryHandler<GetCustomerQuery, Maybe<CustomerDto>>, GetCustomerQueryHandler> ();
-            services.AddSingleton<IQueryHandler<GetUsernameByCustomerIdQuery, Maybe<string>>, GetUsernameByCustomerIdQueryHandler> ();
-            services.AddSingleton<IQueryHandler<IsUsernameAvailableQuery, bool>, IsUsernameAvailableQueryHandler> ();
-            services.AddSingleton<IQueryHandler<LoginQuery, bool>, LoginQueryHandler> ();
+            services.AddSingleton<IQueryHandler<GetAvailableCustomerIdQuery, Guid>, GetAvailableCustomerIdQueryHandler>();
+            services.AddSingleton<IQueryHandler<GetCustomerIdByUsernameQuery, Maybe<Guid>>, GetCustomerIdByUsernameQueryHandler>();
+            services.AddSingleton<IQueryHandler<GetCustomerQuery, Maybe<CustomerDto>>, GetCustomerQueryHandler>();
+            services.AddSingleton<IQueryHandler<GetUsernameByCustomerIdQuery, Maybe<string>>, GetUsernameByCustomerIdQueryHandler>();
+            services.AddSingleton<IQueryHandler<IsUsernameAvailableQuery, bool>, IsUsernameAvailableQueryHandler>();
+            services.AddSingleton<IQueryHandler<LoginQuery, bool>, LoginQueryHandler>();
             services.AddSingleton<IQueryHandler<GetAvailableAccountIdQuery, Guid>, GetAvailableAccountIdQueryHandler>();
 
             services.AddSingleton<ICommandHandler<OpenAccountCommand>, OpenAccountCommandHandler>();
             services.AddSingleton<ICommandHandler<TransferMoneyCommand>, TransferMoneyCommandHandler>();
-            services.AddSingleton<ICommandHandler<RegisterCustomerCommand>, RegisterCustomerCommandHandler> ();
-            services.AddSingleton<ICommandHandler<SetCreditLimitForAccountIdCommand>, SetCreditLimitForAccountIdCommandHandler> ();
+            services.AddSingleton<ICommandHandler<RegisterCustomerCommand>, RegisterCustomerCommandHandler>();
+            services.AddSingleton<ICommandHandler<SetCreditLimitForAccountIdCommand>, SetCreditLimitForAccountIdCommandHandler>();
 
             services.AddSingleton<ITimeProvider, UtcTime>();
             services.AddSingleton<IAccountFacade, AccountFacade>();
             services.AddSingleton<ICustomerFacade, CustomerFacade>();
-            services.AddSingleton<ICustomerRepository, CustomerArchive>();
             services.AddSingleton<TransferDtoVisitorFactory>();
             services.AddSingleton<TransactionAdapterFactory>();
-            services.AddMvc();
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,29 +89,15 @@ namespace dk.lashout.LARPay
         {
             if (env.IsDevelopment())
             {
-                app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
 
-            app.UseStaticFiles();
-
-            app.UseAuthentication();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseHttpsRedirection();
+            app.UseMvc();
         }
-
-    }
-
-    public class ApplicationUser
-    {
     }
 }

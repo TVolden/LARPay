@@ -25,11 +25,11 @@
     <script>
         $(function () {
             var customer_application;
-            $.getJSON('/customer/create',
+            $.getJSON('/customer/register',
                 function(data) {
                     customer_application = data;
                     $('#inputName').attr('placeholder', data.name);
-                    $('#inputIdentity').attr('placeholder', data.identity);
+                    $('#inputIdentity').attr('placeholder', data.username);
                     $('#inputPincode').attr('placeholder', data.pincode);
                 });
 
@@ -43,10 +43,10 @@
                 customer_request = jQuery.extend({}, customer_application);
 
                 customer_request.name = name;
-                customer_request.identity = identity;
+                customer_request.username = identity;
                 customer_request.pincode = pincode;
 
-                $.post('/customer/create',
+                $.post('/customer/register',
                     customer_request,
                     function() {
                         alert('Success!');

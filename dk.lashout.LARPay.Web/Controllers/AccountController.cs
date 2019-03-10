@@ -1,22 +1,22 @@
-﻿using System.Security.Claims;
+﻿using dk.lashout.LARPay.Bank;
+using dk.lashout.LARPay.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using dk.lashout.LARPay.Web.Models;
 using System.Collections.Generic;
-using dk.lashout.LARPay.Bank;
+using System.Security.Claims;
 
 namespace dk.lashout.LARPay.Web.Controllers
 {
-    public class TransactionController : Controller
+    public class AccountController : Controller
     {
         private readonly IAccountFacade _accountFacade;
 
-        public TransactionController(IAccountFacade accountFacade)
+        public AccountController(IAccountFacade accountFacade)
         {
             _accountFacade = accountFacade ?? throw new System.ArgumentNullException(nameof(accountFacade));
         }
 
-        public IActionResult Create()
+        public IActionResult Transfer()
         {
             var transaction = new TransferViewModel
             {
@@ -29,7 +29,7 @@ namespace dk.lashout.LARPay.Web.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult Create(TransferViewModel model)
+        public IActionResult Transfer(TransferViewModel model)
         {
             var sender = getCurrentUser();
             var result = _accountFacade.Transfer(sender, model.Recipient, model.Amount, model.Description);
@@ -41,30 +41,50 @@ namespace dk.lashout.LARPay.Web.Controllers
         }
 
         [Authorize]
-        public IActionResult Index()
+        public IActionResult Balance()
         {
             var customer = getCurrentUser();
             return Json(_accountFacade.GetBalance(customer));
         }
 
         [Authorize]
-        public IActionResult List()
+        public IActionResult Statement()
         {
             var customer = getCurrentUser();
             var accountStatement = _accountFacade.GetStatement(customer);
-            var transactions = new List<TransferViewModel>();
-            foreach(var trx in accountStatement)
+            var transfers = new List<TransferViewModel>();
+            foreach (var trx in accountStatement)
             {
-                var transaction = new TransferViewModel()
+                var transfer = new TransferViewModel()
                 {
                     Amount = trx.Amount,
                     Description = trx.Description,
                     Recipient = trx.Recipient,
                     Date = trx.Date
                 };
-                transactions.Add(transaction);
+                transfers.Add(transfer);
             }
-            return Json(transactions.ToArray());
+            return Json(transfers.ToArray());
+        }
+
+        [Authorize]
+        public IActionResult CreditLimit()
+        {
+            var customer = getCurrentUser();
+            return Json(_accountFacade.GetCreditLimit(customer));
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult CreditLimit(decimal creditLimit)
+        {
+            var customer = getCurrentUser();
+            var result = _accountFacade.SetCreditLimit(customer, creditLimit);
+
+            if (result.Success)
+                return Ok();
+
+            return BadRequest(result.ErrorMessage);
         }
 
         private string getCurrentUser()
