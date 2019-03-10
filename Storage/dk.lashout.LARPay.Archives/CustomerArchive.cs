@@ -43,7 +43,7 @@ namespace dk.lashout.LARPay.Archives
 
         public Maybe<ICustomer> GetCustomer(Guid customerId)
         {
-            if (!HasCustomer(customerId))
+            if (HasCustomer(customerId))
                 return new Maybe<ICustomer>(_repository[customerId]);
             return new Maybe<ICustomer>();
         }
