@@ -1,7 +1,6 @@
-﻿using dk.lashout.LARPay.Clock;
-using System;
+﻿using System;
 
-namespace dk.lashout.LARPay.Accounting.Forms
+namespace dk.lashout.LARPay.Archives.Applications
 {
     public abstract class Transaction
     {

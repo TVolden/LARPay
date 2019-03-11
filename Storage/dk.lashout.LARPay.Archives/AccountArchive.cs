@@ -1,21 +1,21 @@
-﻿using dk.lashout.LARPay.Accounting.Clerks;
-using dk.lashout.LARPay.Accounting.Forms;
+﻿using dk.lashout.LARPay.Archives.Applications;
 using dk.lashout.MaybeType;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace dk.lashout.LARPay.Archives
 {
-    public class AccountArchive : IAccountRepository
+    public class AccountArchive
     {
-        private readonly Dictionary<Guid, IAccount> _accounts;
+        private readonly Dictionary<Guid, Account> _accounts;
 
         public AccountArchive()
         {
-            _accounts = new Dictionary<Guid, IAccount>();
+            _accounts = new Dictionary<Guid, Account>();
         }
 
-        public void AddAccount(Guid accountId, IAccount account)
+        public void AddAccount(Guid accountId, Account account)
         {
             if (!HasAccount(accountId))
                 _accounts.Add(accountId, account);
@@ -26,11 +26,11 @@ namespace dk.lashout.LARPay.Archives
             return _accounts.ContainsKey(id);
         }
 
-        public Maybe<IAccount> GetAccount(Guid accountId)
+        public Maybe<Account> GetAccount(Guid accountId)
         {
             if (HasAccount(accountId))
-                return new Maybe<IAccount>(_accounts[accountId]);
-            return new Maybe<IAccount>();
+                return new Maybe<Account>(_accounts[accountId]);
+            return new Maybe<Account>();
         }
 
         public Maybe<Guid> GetAccountId(Guid customerId)
@@ -41,6 +41,15 @@ namespace dk.lashout.LARPay.Archives
                     return new Maybe<Guid>(pair.Key);
             }
             return new Maybe<Guid>();
+        }
+
+        public Maybe<decimal> GetBalance(Guid accountId)
+        {
+            var account = GetAccount(accountId);
+            if (!account.HasValue())
+                return new Maybe<decimal>();
+
+            return new Maybe<decimal>(account.ValueOrDefault(null).GetTransactions().Sum(t => t.Amount));
         }
     }
 }

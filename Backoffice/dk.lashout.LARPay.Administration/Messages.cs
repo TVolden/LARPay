@@ -34,5 +34,15 @@ namespace dk.lashout.LARPay.Administration
 
             return result;
         }
+
+        public void Dispatch(IEvent @event)
+        {
+            Type eventObserverType = typeof(IEventObserver<>);
+            Type[] eventType = { @event.GetType() };
+            Type genericObserverType = eventObserverType.MakeGenericType(eventType);
+
+            dynamic observer = _provider.GetService(genericObserverType);
+            observer.Update((dynamic)@event);
+        }
     }
 }

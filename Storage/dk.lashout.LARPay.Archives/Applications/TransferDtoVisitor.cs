@@ -3,7 +3,7 @@ using dk.lashout.LARPay.Accounting.Services;
 using dk.lashout.LARPay.Administration;
 using System;
 
-namespace dk.lashout.LARPay.Accounting.Applications
+namespace dk.lashout.LARPay.Archives.Applications
 {
     public class TransferDtoVisitor : ITransferVisitor<TransferDto>
     {

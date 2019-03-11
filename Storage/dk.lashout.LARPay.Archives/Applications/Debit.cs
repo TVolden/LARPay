@@ -1,7 +1,6 @@
-﻿using dk.lashout.LARPay.Accounting.Forms;
-using System;
+﻿using System;
 
-namespace dk.lashout.LARPay.Accounting.Applications
+namespace dk.lashout.LARPay.Archives.Applications
 {
     public class Debit : Transaction
     {

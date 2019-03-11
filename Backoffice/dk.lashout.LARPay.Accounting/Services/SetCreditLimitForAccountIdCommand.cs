@@ -1,4 +1,4 @@
-﻿using dk.lashout.LARPay.Accounting.Clerks;
+﻿using dk.lashout.LARPay.Accounting.Events;
 using dk.lashout.LARPay.Administration;
 using System;
 
@@ -18,20 +18,19 @@ namespace dk.lashout.LARPay.Accounting.Services
 
     public sealed class SetCreditLimitForAccountIdCommandHandler : ICommandHandler<SetCreditLimitForAccountIdCommand>
     {
-        private readonly IAccountRepository _accountRepository;
+        private readonly Messages _messages;
 
-        public SetCreditLimitForAccountIdCommandHandler(IAccountRepository accountRepository)
+        public SetCreditLimitForAccountIdCommandHandler(Messages messages)
         {
-            _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
+            _messages = messages ?? throw new ArgumentNullException(nameof(messages));
         }
 
         public Result Handle(SetCreditLimitForAccountIdCommand command)
         {
-            var account = _accountRepository.GetAccount(command.AccountId);
-            if (!account.HasValue())
+            if (!_messages.Dispatch(new HasAccountQuery(command.AccountId)))
                 return new Result("Account not found");
 
-            account.ValueOrDefault(null).creditLimit = command.CreditLimit;
+            _messages.Dispatch(new CreditLimitChangedEvent(command.AccountId, command.CreditLimit));
 
             return new Result();
         }

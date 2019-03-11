@@ -1,10 +1,9 @@
-﻿using dk.lashout.LARPay.Accounting.Forms;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace dk.lashout.LARPay.Accounting.Applications
+namespace dk.lashout.LARPay.Archives.Applications
 {
-    class Account : IAccount
+    public class Account
     {
         public Guid CustomerId { get; }
         public decimal creditLimit { get; set; }

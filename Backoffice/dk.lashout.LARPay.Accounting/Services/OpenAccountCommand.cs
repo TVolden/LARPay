@@ -1,5 +1,4 @@
-﻿using dk.lashout.LARPay.Accounting.Applications;
-using dk.lashout.LARPay.Accounting.Clerks;
+﻿using dk.lashout.LARPay.Accounting.Events;
 using dk.lashout.LARPay.Administration;
 using System;
 
@@ -19,20 +18,19 @@ namespace dk.lashout.LARPay.Accounting.Services
 
     public sealed class OpenAccountCommandHandler : ICommandHandler<OpenAccountCommand>
     {
-        private readonly IAccountRepository _accountRepository;
+        private readonly Messages _messages;
 
-        public OpenAccountCommandHandler(IAccountRepository accountRepository)
+        public OpenAccountCommandHandler(Messages messages)
         {
-            _accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
+            _messages = messages;
         }
 
         public Result Handle(OpenAccountCommand command)
         {
-            if (_accountRepository.HasAccount(command.AccountId))
+            if (_messages.Dispatch(new HasAccountQuery(command.AccountId)))
                 return new Result("AccountId already exists, try again with an other GUID");
 
-            var account = new Account(command.CustomerId);
-            _accountRepository.AddAccount(command.AccountId, account);
+            _messages.Dispatch(new NewAccountEvent(command.AccountId, command.CustomerId));
             return new Result();
         }
     }

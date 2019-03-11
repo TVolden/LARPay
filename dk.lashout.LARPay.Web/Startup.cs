@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using dk.lashout.LARPay.Accounting.Applications;
-using dk.lashout.LARPay.Accounting.Clerks;
+using dk.lashout.LARPay.Accounting.Events;
 using dk.lashout.LARPay.Accounting.Forms;
 using dk.lashout.LARPay.Accounting.Services;
 using dk.lashout.LARPay.Administration;
 using dk.lashout.LARPay.Archives;
+using dk.lashout.LARPay.Archives.Applications;
+using dk.lashout.LARPay.Archives.EventObservers;
+using dk.lashout.LARPay.Archives.QueryHandlers;
 using dk.lashout.LARPay.Bank;
 using dk.lashout.LARPay.Clock;
 using dk.lashout.LARPay.Customers.Clerks;
@@ -54,7 +56,7 @@ namespace dk.lashout.LARPay
 
             services.AddSingleton<Messages>();
 
-            services.AddSingleton<IAccountRepository, AccountArchive>();
+            services.AddSingleton<AccountArchive>();
             services.AddSingleton<ICustomerRepository, CustomerArchive>();
 
             services.AddSingleton<IQueryHandler<GetBalanceQuery, decimal>, GetBalanceQueryHandler>();
@@ -68,11 +70,17 @@ namespace dk.lashout.LARPay
             services.AddSingleton<IQueryHandler<IsUsernameAvailableQuery, bool>, IsUsernameAvailableQueryHandler> ();
             services.AddSingleton<IQueryHandler<LoginQuery, bool>, LoginQueryHandler> ();
             services.AddSingleton<IQueryHandler<GetAvailableAccountIdQuery, Guid>, GetAvailableAccountIdQueryHandler>();
+            services.AddSingleton<IQueryHandler<GetDisposableAmountQuery, decimal>, GetDisposableAmountQueryHandler>();
+            services.AddSingleton<IQueryHandler<HasAccountQuery, bool>, HasAccountQueryHandler>();
 
             services.AddSingleton<ICommandHandler<OpenAccountCommand>, OpenAccountCommandHandler>();
             services.AddSingleton<ICommandHandler<TransferMoneyCommand>, TransferMoneyCommandHandler>();
             services.AddSingleton<ICommandHandler<RegisterCustomerCommand>, RegisterCustomerCommandHandler> ();
             services.AddSingleton<ICommandHandler<SetCreditLimitForAccountIdCommand>, SetCreditLimitForAccountIdCommandHandler> ();
+
+            services.AddSingleton<IEventObserver<CreditLimitChangedEvent>, CreditLimitChangedEventObserver> ();
+            services.AddSingleton<IEventObserver<MoneyTransferedEvent>, MoneyTransferedEventObserver> ();
+            services.AddSingleton<IEventObserver<NewAccountEvent>, NewAccountEventObserver> ();
 
             services.AddSingleton<ITimeProvider, UtcTime>();
             services.AddSingleton<IAccountFacade, AccountFacade>();
