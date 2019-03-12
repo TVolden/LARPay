@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using dk.lashout.LARPay.AccountArchive;
+using dk.lashout.LARPay.AccountArchive.Applications;
+using dk.lashout.LARPay.AccountArchive.EventObservers;
+using dk.lashout.LARPay.AccountArchive.QueryHandlers;
+using dk.lashout.LARPay.Accounting;
 using dk.lashout.LARPay.Accounting.Events;
 using dk.lashout.LARPay.Accounting.Forms;
-using dk.lashout.LARPay.Accounting.Services;
 using dk.lashout.LARPay.Administration;
-using dk.lashout.LARPay.Archives;
-using dk.lashout.LARPay.Archives.Applications;
-using dk.lashout.LARPay.Archives.EventObservers;
-using dk.lashout.LARPay.Archives.QueryHandlers;
 using dk.lashout.LARPay.Bank;
 using dk.lashout.LARPay.Clock;
-using dk.lashout.LARPay.Customers.Clerks;
+using dk.lashout.LARPay.CustomerArchive;
+using dk.lashout.LARPay.CustomerArchive.EventObservers;
+using dk.lashout.LARPay.CustomerArchive.QueryHandlers;
+using dk.lashout.LARPay.Customers.Events;
 using dk.lashout.LARPay.Customers.Service;
 using dk.lashout.MaybeType;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -56,8 +59,8 @@ namespace dk.lashout.LARPay
 
             services.AddSingleton<Messages>();
 
-            services.AddSingleton<AccountArchive>();
-            services.AddSingleton<ICustomerRepository, CustomerArchive>();
+            services.AddSingleton<AccountStates>();
+            services.AddSingleton<CustomerStates>();
 
             services.AddSingleton<IQueryHandler<GetBalanceQuery, decimal>, GetBalanceQueryHandler>();
             services.AddSingleton<IQueryHandler<GetAccountIdByCustomerIdQuery, Maybe<Guid>>, GetAccountIdByCustomerIdQueryHandler>();
@@ -72,6 +75,7 @@ namespace dk.lashout.LARPay
             services.AddSingleton<IQueryHandler<GetAvailableAccountIdQuery, Guid>, GetAvailableAccountIdQueryHandler>();
             services.AddSingleton<IQueryHandler<GetDisposableAmountQuery, decimal>, GetDisposableAmountQueryHandler>();
             services.AddSingleton<IQueryHandler<HasAccountQuery, bool>, HasAccountQueryHandler>();
+            services.AddSingleton<IQueryHandler<HasCustomerIdQuery, bool>, HasCustomerIdQueryHandler>();
 
             services.AddSingleton<ICommandHandler<OpenAccountCommand>, OpenAccountCommandHandler>();
             services.AddSingleton<ICommandHandler<TransferAmountCommand>, TransferMoneyCommandHandler>();
@@ -80,12 +84,12 @@ namespace dk.lashout.LARPay
 
             services.AddSingleton<IEventObserver<CreditLimitChangedEvent>, CreditLimitChangedEventObserver> ();
             services.AddSingleton<IEventObserver<AmountTransferedEvent>, AmountTransferedEventObserver> ();
-            services.AddSingleton<IEventObserver<NewAccountEvent>, NewAccountEventObserver> ();
+            services.AddSingleton<IEventObserver<AccountCreatedEvent>, AccountCreatedEventObserver> ();
+            services.AddSingleton<IEventObserver<CustomerRegisteredEvent>, CustomerRegisteredEventObserver> ();
 
             services.AddSingleton<ITimeProvider, UtcTime>();
             services.AddSingleton<IAccountFacade, AccountFacade>();
             services.AddSingleton<ICustomerFacade, CustomerFacade>();
-            services.AddSingleton<ICustomerRepository, CustomerArchive>();
             services.AddSingleton<TransferDtoVisitorFactory>();
             services.AddSingleton<TransactionAdapterFactory>();
             services.AddMvc();

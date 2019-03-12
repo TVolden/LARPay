@@ -2,6 +2,6 @@
 {
     public interface IEventObserver<TEvent> where TEvent : IEvent
     {
-        void Update(TEvent newEvent);
+        void Update(TEvent @event);
     }
 }

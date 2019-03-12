@@ -1,6 +1,6 @@
 ﻿using dk.lashout.LARPay.Administration;
-using dk.lashout.LARPay.Customers.Applications;
-using dk.lashout.LARPay.Customers.Clerks;
+using dk.lashout.LARPay.Clock;
+using dk.lashout.LARPay.Customers.Events;
 using System;
 
 namespace dk.lashout.LARPay.Customers.Service
@@ -23,20 +23,21 @@ namespace dk.lashout.LARPay.Customers.Service
 
     public sealed class RegisterCustomerCommandHandler : ICommandHandler<RegisterCustomerCommand>
     {
-        private readonly ICustomerRepository _customerRepository;
+        private readonly Messages _messages;
+        private readonly ITimeProvider _timeProvider;
 
-        public RegisterCustomerCommandHandler(ICustomerRepository customerRepository)
+        public RegisterCustomerCommandHandler(Messages messages, ITimeProvider timeProvider)
         {
-            _customerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
+            _messages = messages ?? throw new ArgumentNullException(nameof(messages));
+            _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
         }
 
         public Result Handle(RegisterCustomerCommand command)
         {
-            if (_customerRepository.HasCustomer(command.CustomerId))
-                return new Result("AccountId already exists, try again with an other GUID");
+            if (_messages.Dispatch(new HasCustomerIdQuery(command.CustomerId)))
+                return new Result("CustomerId already exists, try again with an other GUID");
 
-            var customer = new CustomerApplication(command.Username, command.Pincode, command.Name);
-            _customerRepository.AddCustomer(command.CustomerId, customer);
+            _messages.Dispatch(new CustomerRegisteredEvent(command.CustomerId, command.Username, command.Pincode, command.Name, _timeProvider.Now));
             return new Result();
         }
     }

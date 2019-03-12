@@ -32,7 +32,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Backoffice\dk.lashout.Clock\dk.lashout.Clock.csproj" />
     <ProjectReference Include="..\dk.lashout.LARPay.Bank\dk.lashout.LARPay.Bank.csproj" />
-    <ProjectReference Include="..\Storage\dk.lashout.LARPay.Archives\dk.lashout.LARPay.Archives.csproj" />
+    <ProjectReference Include="..\Storage\dk.lashout.LARPay.AccountArchive\dk.lashout.LARPay.AccountArchive.csproj" />
+    <ProjectReference Include="..\Storage\dk.lashout.LARPay.CustomerArchive\dk.lashout.LARPay.CustomerArchive.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -9,6 +9,7 @@
     <Product>LARPay</Product>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\dk.lashout.Clock\dk.lashout.Clock.csproj" />
     <ProjectReference Include="..\dk.lashout.LARPay.Administration\dk.lashout.LARPay.Administration.csproj" />
     <ProjectReference Include="..\dk.lashout.MaybeType\dk.lashout.MaybeType.csproj" />
   </ItemGroup>
