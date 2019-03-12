@@ -74,12 +74,12 @@ namespace dk.lashout.LARPay
             services.AddSingleton<IQueryHandler<HasAccountQuery, bool>, HasAccountQueryHandler>();
 
             services.AddSingleton<ICommandHandler<OpenAccountCommand>, OpenAccountCommandHandler>();
-            services.AddSingleton<ICommandHandler<TransferMoneyCommand>, TransferMoneyCommandHandler>();
+            services.AddSingleton<ICommandHandler<TransferAmountCommand>, TransferMoneyCommandHandler>();
             services.AddSingleton<ICommandHandler<RegisterCustomerCommand>, RegisterCustomerCommandHandler> ();
             services.AddSingleton<ICommandHandler<SetCreditLimitForAccountIdCommand>, SetCreditLimitForAccountIdCommandHandler> ();
 
             services.AddSingleton<IEventObserver<CreditLimitChangedEvent>, CreditLimitChangedEventObserver> ();
-            services.AddSingleton<IEventObserver<MoneyTransferedEvent>, MoneyTransferedEventObserver> ();
+            services.AddSingleton<IEventObserver<AmountTransferedEvent>, AmountTransferedEventObserver> ();
             services.AddSingleton<IEventObserver<NewAccountEvent>, NewAccountEventObserver> ();
 
             services.AddSingleton<ITimeProvider, UtcTime>();

@@ -5,14 +5,14 @@ using System;
 
 namespace dk.lashout.LARPay.Accounting.Services
 {
-    public class TransferMoneyCommand : ICommand
+    public class TransferAmountCommand : ICommand
     {
         public Guid Benefactor { get; }
         public Guid Recipient { get; }
         public decimal Amount { get; }
         public string Description { get; }
 
-        public TransferMoneyCommand(Guid benefactor, Guid recipient, decimal amount, string description)
+        public TransferAmountCommand(Guid benefactor, Guid recipient, decimal amount, string description)
         {
             Benefactor = benefactor;
             Recipient = recipient;
@@ -22,7 +22,7 @@ namespace dk.lashout.LARPay.Accounting.Services
 
     }
 
-    public sealed class TransferMoneyCommandHandler : ICommandHandler<TransferMoneyCommand>
+    public sealed class TransferMoneyCommandHandler : ICommandHandler<TransferAmountCommand>
     {
         private readonly Messages _messages;
         private readonly ITimeProvider _timeProvider;
@@ -33,12 +33,12 @@ namespace dk.lashout.LARPay.Accounting.Services
             _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
         }
 
-        public Result Handle(TransferMoneyCommand command)
+        public Result Handle(TransferAmountCommand command)
         {
-            if (_messages.Dispatch(new HasAccountQuery(command.Benefactor)))
+            if (!_messages.Dispatch(new HasAccountQuery(command.Benefactor)))
                 return new Result("Benefactor account not found.");
 
-            if (_messages.Dispatch(new HasAccountQuery(command.Recipient)))
+            if (!_messages.Dispatch(new HasAccountQuery(command.Recipient)))
                 return new Result("Recipient account not found.");
 
             var disposable = _messages.Dispatch(new GetDisposableAmountQuery(command.Benefactor));
@@ -47,7 +47,7 @@ namespace dk.lashout.LARPay.Accounting.Services
 
             var transferDate = _timeProvider.Now;
 
-            _messages.Dispatch(new MoneyTransferedEvent(command.Benefactor, command.Recipient, command.Amount, command.Description, transferDate));
+            _messages.Dispatch(new AmountTransferedEvent(command.Benefactor, command.Recipient, command.Amount, command.Description, transferDate));
 
             return new Result();
         }

@@ -63,7 +63,7 @@ namespace dk.lashout.LARPay.Bank
             var fromAccount = getAccount(from);
             var toAccount = getAccount(receipant);
 
-            return _messages.Dispatch(new TransferMoneyCommand(fromAccount, toAccount, amount, description));
+            return _messages.Dispatch(new TransferAmountCommand(fromAccount, toAccount, amount, description));
         }
     }
 }

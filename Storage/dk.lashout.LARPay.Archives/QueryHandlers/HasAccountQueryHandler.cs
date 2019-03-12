@@ -15,7 +15,7 @@ namespace dk.lashout.LARPay.Archives.QueryHandlers
 
         public bool Handle(HasAccountQuery query)
         {
-            return _archive.GetAccount(query.AccountId).HasValue();
+            return _archive.HasAccount(query.AccountId);
         }
     }
 }

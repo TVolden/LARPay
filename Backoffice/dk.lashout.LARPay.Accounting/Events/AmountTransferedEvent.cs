@@ -3,7 +3,7 @@ using System;
 
 namespace dk.lashout.LARPay.Accounting.Events
 {
-    public class MoneyTransferedEvent : IEvent
+    public class AmountTransferedEvent : IEvent
     {
         public Guid BenefactorAccountId { get; }
         public Guid ReceipientAccountId { get; }
@@ -11,7 +11,7 @@ namespace dk.lashout.LARPay.Accounting.Events
         public string Description { get; }
         public DateTime Date { get; }
 
-        public MoneyTransferedEvent(Guid benefactor, Guid receipient, decimal amount, string description, DateTime date)
+        public AmountTransferedEvent(Guid benefactor, Guid receipient, decimal amount, string description, DateTime date)
         {
             BenefactorAccountId = benefactor;
             ReceipientAccountId = receipient;

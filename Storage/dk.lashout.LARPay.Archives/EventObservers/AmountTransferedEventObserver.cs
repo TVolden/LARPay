@@ -5,16 +5,16 @@ using System;
 
 namespace dk.lashout.LARPay.Archives.EventObservers
 {
-    public class MoneyTransferedEventObserver : IEventObserver<MoneyTransferedEvent>
+    public class AmountTransferedEventObserver : IEventObserver<AmountTransferedEvent>
     {
         private readonly AccountArchive _archive;
 
-        public MoneyTransferedEventObserver(AccountArchive archive)
+        public AmountTransferedEventObserver(AccountArchive archive)
         {
             _archive = archive ?? throw new ArgumentNullException(nameof(archive));
         }
 
-        public void Update(MoneyTransferedEvent newEvent)
+        public void Update(AmountTransferedEvent newEvent)
         {
             var benefactor = _archive.GetAccount(newEvent.BenefactorAccountId).ValueOrDefault(null);
             var recipient = _archive.GetAccount(newEvent.ReceipientAccountId).ValueOrDefault(null);
