@@ -1,5 +1,5 @@
 ﻿using dk.lashout.LARPay.Administration;
-using dk.lashout.LARPay.Customers.Service;
+using dk.lashout.LARPay.Customers;
 
 namespace dk.lashout.LARPay.CustomerArchive.QueryHandlers
 {

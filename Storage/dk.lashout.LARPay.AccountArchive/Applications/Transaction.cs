@@ -5,9 +5,8 @@ namespace dk.lashout.LARPay.AccountArchive.Applications
     public abstract class Transaction
     {
         public string Description { get; }
-        public DateTime Date1 { get; }
-        public decimal Amount { get; }
         public DateTime Date { get; }
+        public decimal Amount { get; }
 
         internal TReturn Accept<TReturn>(ITransferVisitor<TReturn> visitor)
         {
@@ -18,7 +17,7 @@ namespace dk.lashout.LARPay.AccountArchive.Applications
         {
             Amount = amount;
             Description = description;
-            Date1 = date;
+            Date = date;
         }
     }
 }

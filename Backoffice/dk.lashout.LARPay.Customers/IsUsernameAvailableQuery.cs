@@ -1,6 +1,6 @@
 ﻿using dk.lashout.LARPay.Administration;
 
-namespace dk.lashout.LARPay.Customers.Service
+namespace dk.lashout.LARPay.Customers
 {
     public class IsUsernameAvailableQuery : IQuery<bool>
     {

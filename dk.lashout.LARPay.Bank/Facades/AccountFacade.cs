@@ -1,6 +1,6 @@
 ﻿using dk.lashout.LARPay.Accounting;
 using dk.lashout.LARPay.Administration;
-using dk.lashout.LARPay.Customers.Service;
+using dk.lashout.LARPay.Customers;
 using System;
 using System.Collections.Generic;
 

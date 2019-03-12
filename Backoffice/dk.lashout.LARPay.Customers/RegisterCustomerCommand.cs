@@ -3,7 +3,7 @@ using dk.lashout.LARPay.Clock;
 using dk.lashout.LARPay.Customers.Events;
 using System;
 
-namespace dk.lashout.LARPay.Customers.Service
+namespace dk.lashout.LARPay.Customers
 {
     public class RegisterCustomerCommand : ICommand
     {

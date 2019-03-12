@@ -1,4 +1,4 @@
-﻿namespace dk.lashout.LARPay.Customers.Service
+﻿namespace dk.lashout.LARPay.Customers.Forms
 {
     public class CustomerDto
     {

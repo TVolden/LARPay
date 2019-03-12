@@ -2,13 +2,13 @@
 using dk.lashout.MaybeType;
 using System;
 
-namespace dk.lashout.LARPay.Customers.Service
+namespace dk.lashout.LARPay.Customers
 {
-    public class GetCustomerQuery : IQuery<Maybe<CustomerDto>>
+    public class GetUsernameByCustomerIdQuery : IQuery<Maybe<string>>
     {
         public Guid CustomerId { get; }
 
-        public GetCustomerQuery(Guid customerId)
+        public GetUsernameByCustomerIdQuery(Guid customerId)
         {
             CustomerId = customerId;
         }
