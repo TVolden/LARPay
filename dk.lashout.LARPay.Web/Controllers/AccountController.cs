@@ -2,6 +2,7 @@
 using dk.lashout.LARPay.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 
@@ -9,9 +10,9 @@ namespace dk.lashout.LARPay.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IAccountFacade _accountFacade;
+        private readonly AccountFacade _accountFacade;
 
-        public AccountController(IAccountFacade accountFacade)
+        public AccountController(AccountFacade accountFacade)
         {
             _accountFacade = accountFacade ?? throw new System.ArgumentNullException(nameof(accountFacade));
         }
@@ -32,10 +33,14 @@ namespace dk.lashout.LARPay.Web.Controllers
         public IActionResult Transfer(TransferViewModel model)
         {
             var sender = getCurrentUser();
-            var result = _accountFacade.Transfer(sender, model.Recipient, model.Amount, model.Description);
-
-            if (!result.Success)
-                return BadRequest(result.ErrorMessage);
+            try
+            {
+                _accountFacade.Transfer(sender, model.Recipient, model.Amount, model.Description);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
             return Ok();
         }
@@ -79,12 +84,15 @@ namespace dk.lashout.LARPay.Web.Controllers
         public IActionResult CreditLimit(decimal creditLimit)
         {
             var customer = getCurrentUser();
-            var result = _accountFacade.SetCreditLimit(customer, creditLimit);
-
-            if (result.Success)
-                return Ok();
-
-            return BadRequest(result.ErrorMessage);
+            try
+            {
+                _accountFacade.SetCreditLimit(customer, creditLimit);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok();
         }
 
         private string getCurrentUser()

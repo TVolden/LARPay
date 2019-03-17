@@ -5,7 +5,7 @@ using System;
 
 namespace dk.lashout.LARPay.Bank
 {
-    public class CustomerFacade : ICustomerFacade
+    public class CustomerFacade
     {
         private readonly Messages _messages;
 
@@ -14,22 +14,16 @@ namespace dk.lashout.LARPay.Bank
             _messages = messages ?? throw new ArgumentNullException(nameof(messages));
         }
 
-        public Result CreateCustomer(string username, string name, string pincode)
+        public void CreateCustomer(string username, string name, string pincode)
         {
             if (!_messages.Dispatch(new IsUsernameAvailableQuery(username)))
-                return new Result("Username not available, try an other");
+                throw new Exception("Username not available");
 
             var customerId = _messages.Dispatch(new GetAvailableCustomerIdQuery());
-            var result = _messages.Dispatch(new RegisterCustomerCommand(customerId, username, pincode, name));
-            if (!result.Success)
-                return result;
+            _messages.Dispatch(new RegisterCustomerCommand(customerId, username, pincode, name));
 
             var accountId = _messages.Dispatch(new GetAvailableAccountIdQuery());
-            result = _messages.Dispatch(new OpenAccountCommand(accountId, customerId));
-            if (!result.Success)
-                return result;
-
-            return new Result();
+            _messages.Dispatch(new OpenAccountCommand(accountId, customerId));
         }
 
         public bool Login(string username, string pincode)

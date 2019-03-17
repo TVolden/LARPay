@@ -16,10 +16,10 @@ namespace dk.lashout.LARPay.Web.Controllers
     public class CustomerController : Controller
     {
         private readonly ITimeProvider _timeprovider;
-        private readonly ICustomerFacade _facade;
+        private readonly CustomerFacade _facade;
         private readonly IConfiguration _configuration;
 
-        public CustomerController(ITimeProvider timeprovider, ICustomerFacade facade, IConfiguration configuration)
+        public CustomerController(ITimeProvider timeprovider, CustomerFacade facade, IConfiguration configuration)
         {
             _timeprovider = timeprovider ?? throw new ArgumentNullException(nameof(timeprovider));
             _facade = facade ?? throw new ArgumentNullException(nameof(facade));
@@ -38,10 +38,15 @@ namespace dk.lashout.LARPay.Web.Controllers
         [HttpPost]
         public ActionResult Register(CustomerViewModel customer)
         {
-            var result = _facade.CreateCustomer(customer.Username, customer.Name, customer.Pincode);
-            if (result.Success)
-                return Created($"/credentials/{customer.Username}", customer);
-            return BadRequest(result.ErrorMessage);
+            try
+            {
+                _facade.CreateCustomer(customer.Username, customer.Name, customer.Pincode);
+            }
+            catch(Exception ex)
+            {
+            return BadRequest(ex.Message);
+            }
+            return Created($"/credentials/{customer.Username}", customer);
         }
 
         public ActionResult Login()

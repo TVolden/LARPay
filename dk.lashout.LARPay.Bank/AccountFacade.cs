@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace dk.lashout.LARPay.Bank
 {
-    public class AccountFacade : IAccountFacade
+    public class AccountFacade
     {
         private readonly Messages _messages;
         private readonly TransactionAdapterFactory _transactionAdapterFactory;
@@ -21,11 +21,11 @@ namespace dk.lashout.LARPay.Bank
         {
             var customerId = _messages.Dispatch(new GetCustomerIdByUsernameQuery(username));
             if (!customerId.HasValue())
-                throw new CustomerNotFoundException(username);
+                throw new UserNotFoundException(username);
 
             var accountId = _messages.Dispatch(new GetAccountIdByCustomerIdQuery(customerId.ValueOrDefault(Guid.Empty)));
             if (!accountId.HasValue())
-                throw new CustomerNotFoundException(username);
+                throw new UserNotFoundException(username);
 
             return accountId.ValueOrDefault(Guid.Empty);
         }
@@ -52,18 +52,17 @@ namespace dk.lashout.LARPay.Bank
             return _messages.Dispatch(new GetCreditLimitForAccountIdQuery(account));
         }
 
-        public Result SetCreditLimit(string username, decimal creditLimit)
+        public void SetCreditLimit(string username, decimal creditLimit)
         {
             var account = getAccount(username);
-            return _messages.Dispatch(new SetCreditLimitForAccountIdCommand(account, creditLimit));
+            _messages.Dispatch(new SetCreditLimitForAccountIdCommand(account, creditLimit));
         }
 
-        public Result Transfer(string from, string receipant, decimal amount, string description)
+        public void Transfer(string from, string receipant, decimal amount, string description)
         {
             var fromAccount = getAccount(from);
             var toAccount = getAccount(receipant);
-
-            return _messages.Dispatch(new TransferAmountCommand(fromAccount, toAccount, amount, description));
+            _messages.Dispatch(new TransferAmountCommand(fromAccount, toAccount, amount, description));
         }
     }
 }

@@ -7,6 +7,8 @@ namespace dk.lashout.LARPay.Customers
 {
     public class RegisterCustomerCommand : ICommand
     {
+        public Guid ProcessId => new Guid("AC71ED51-7F1E-41F2-996E-0F071317D7C9");
+
         public Guid CustomerId { get; }
         public string Username { get; }
         public string Pincode { get; }
@@ -32,13 +34,12 @@ namespace dk.lashout.LARPay.Customers
             _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
         }
 
-        public Result Handle(RegisterCustomerCommand command)
+        public void Handle(RegisterCustomerCommand command)
         {
             if (_messages.Dispatch(new HasCustomerIdQuery(command.CustomerId)))
-                return new Result("CustomerId already exists, try again with an other GUID");
+                throw new Exception("CustomerId already exists, try again with an other GUID");
 
-            _messages.Dispatch(new CustomerRegisteredEvent(command.CustomerId, command.Username, command.Pincode, command.Name, _timeProvider.Now));
-            return new Result();
+            _messages.Dispatch(new CustomerRegisteredEvent(_timeProvider.Now, command.ProcessId, command.CustomerId, command.Username, command.Pincode, command.Name));
         }
     }
 }

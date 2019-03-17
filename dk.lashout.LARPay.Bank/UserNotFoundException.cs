@@ -2,10 +2,11 @@
 
 namespace dk.lashout.LARPay.Bank
 {
-    class CustomerNotFoundException : Exception
+    class UserNotFoundException : Exception
     {
         public string Username { get; }
-        public CustomerNotFoundException(string username)
+
+        public UserNotFoundException(string username) : base($"User not found. Username: {username}")
         {
             Username = username;
         }

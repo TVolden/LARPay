@@ -89,8 +89,8 @@ namespace dk.lashout.LARPay
             services.AddSingleton<IEventObserver<CustomerRegisteredEvent>, CustomerRegisteredEventObserver> ();
 
             services.AddSingleton<ITimeProvider, UtcTime>();
-            services.AddSingleton<IAccountFacade, AccountFacade>();
-            services.AddSingleton<ICustomerFacade, CustomerFacade>();
+            services.AddSingleton<AccountFacade>();
+            services.AddSingleton<CustomerFacade>();
             services.AddSingleton<TransferDtoVisitorFactory>();
             services.AddSingleton<TransactionAdapterFactory>();
             services.AddMvc();

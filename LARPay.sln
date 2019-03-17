@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dk.lashout.LARPay.CustomerA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dk.lashout.LARPay.AccountArchive", "Storage\dk.lashout.LARPay.AccountArchive\dk.lashout.LARPay.AccountArchive.csproj", "{AA6217BF-930D-44BD-8014-3E26FA3C1BD2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dk.lashout.LARPay.EventArchive", "Storage\dk.lashout.LARPay.EventArchive\dk.lashout.LARPay.EventArchive.csproj", "{F4326C37-B9EB-4386-B368-30E691D9312A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{AA6217BF-930D-44BD-8014-3E26FA3C1BD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA6217BF-930D-44BD-8014-3E26FA3C1BD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA6217BF-930D-44BD-8014-3E26FA3C1BD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4326C37-B9EB-4386-B368-30E691D9312A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4326C37-B9EB-4386-B368-30E691D9312A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4326C37-B9EB-4386-B368-30E691D9312A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4326C37-B9EB-4386-B368-30E691D9312A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +85,7 @@ Global
 		{A9CF08DB-8C2E-4D4B-8207-BD97B130D004} = {B094B473-61E5-4F76-9B4D-71C838A8299E}
 		{B80D2E12-9F2F-4601-91BF-5C5517EBD3E8} = {7911C9F2-C522-40CB-9010-9F280F97879C}
 		{AA6217BF-930D-44BD-8014-3E26FA3C1BD2} = {7911C9F2-C522-40CB-9010-9F280F97879C}
+		{F4326C37-B9EB-4386-B368-30E691D9312A} = {7911C9F2-C522-40CB-9010-9F280F97879C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {02815161-6E91-42E1-AAE3-AEDF49224CC3}

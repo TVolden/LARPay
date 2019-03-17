@@ -11,16 +11,14 @@ namespace dk.lashout.LARPay.Administration
             _provider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
 
-        public Result Dispatch (ICommand command)
+        public void Dispatch (ICommand command)
         {
             Type commandHandlerType = typeof(ICommandHandler<>);
             Type[] commandType = { command.GetType() };
             Type genericHandlerType = commandHandlerType.MakeGenericType(commandType);
 
             dynamic handler = _provider.GetService(genericHandlerType);
-            Result result = handler.Handle((dynamic)command);
-
-            return result;
+            handler.Handle((dynamic)command);
         }
 
         public T Dispatch<T>(IQuery<T> query)

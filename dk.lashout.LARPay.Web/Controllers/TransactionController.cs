@@ -4,14 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 using dk.lashout.LARPay.Web.Models;
 using System.Collections.Generic;
 using dk.lashout.LARPay.Bank;
+using System;
 
 namespace dk.lashout.LARPay.Web.Controllers
 {
     public class TransactionController : Controller
     {
-        private readonly IAccountFacade _accountFacade;
+        private readonly AccountFacade _accountFacade;
 
-        public TransactionController(IAccountFacade accountFacade)
+        public TransactionController(AccountFacade accountFacade)
         {
             _accountFacade = accountFacade ?? throw new System.ArgumentNullException(nameof(accountFacade));
         }
@@ -32,11 +33,14 @@ namespace dk.lashout.LARPay.Web.Controllers
         public IActionResult Create(TransferViewModel model)
         {
             var sender = getCurrentUser();
-            var result = _accountFacade.Transfer(sender, model.Recipient, model.Amount, model.Description);
-
-            if (!result.Success)
-                return BadRequest(result.ErrorMessage);
-
+            try
+            {
+                _accountFacade.Transfer(sender, model.Recipient, model.Amount, model.Description);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return Ok();
         }
 

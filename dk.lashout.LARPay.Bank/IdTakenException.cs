@@ -2,11 +2,11 @@
 
 namespace dk.lashout.LARPay.Bank
 {
-    internal class IdentifierTakenException : Exception
+    internal class IdTakenException : Exception
     {
         public string Identifier { get; }
 
-        public IdentifierTakenException(string identifier)
+        public IdTakenException(string identifier)
         {
             Identifier = identifier;
         }

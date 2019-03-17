@@ -19,8 +19,8 @@ namespace dk.lashout.LARPay.AccountArchive.EventObservers
             var benefactor = _archive.GetAccount(@event.BenefactorAccountId).ValueOrDefault(null);
             var recipient = _archive.GetAccount(@event.ReceipientAccountId).ValueOrDefault(null);
 
-            var debit = new Debit(@event.ReceipientAccountId, @event.Amount, @event.Description, @event.Date);
-            var credit = new Credit(@event.BenefactorAccountId, @event.Amount, @event.Description, @event.Date);
+            var debit = new Debit(@event.ReceipientAccountId, @event.Amount, @event.Description, @event.EventTime);
+            var credit = new Credit(@event.BenefactorAccountId, @event.Amount, @event.Description, @event.EventTime);
 
             benefactor.AddTransaction(debit);
             recipient.AddTransaction(credit);

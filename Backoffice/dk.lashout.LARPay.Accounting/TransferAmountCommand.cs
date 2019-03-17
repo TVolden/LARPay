@@ -1,4 +1,5 @@
 ﻿using dk.lashout.LARPay.Accounting.Events;
+using dk.lashout.LARPay.Accounting.Exceptions;
 using dk.lashout.LARPay.Administration;
 using dk.lashout.LARPay.Clock;
 using System;
@@ -7,6 +8,8 @@ namespace dk.lashout.LARPay.Accounting
 {
     public class TransferAmountCommand : ICommand
     {
+        public Guid ProcessId => new Guid("50118802-69B6-4445-AC35-7BBACE2D4F3D");
+
         public Guid Benefactor { get; }
         public Guid Recipient { get; }
         public decimal Amount { get; }
@@ -19,7 +22,6 @@ namespace dk.lashout.LARPay.Accounting
             Amount = amount;
             Description = description;
         }
-
     }
 
     public sealed class TransferMoneyCommandHandler : ICommandHandler<TransferAmountCommand>
@@ -33,23 +35,19 @@ namespace dk.lashout.LARPay.Accounting
             _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
         }
 
-        public Result Handle(TransferAmountCommand command)
+        public void Handle(TransferAmountCommand command)
         {
             if (!_messages.Dispatch(new HasAccountQuery(command.Benefactor)))
-                return new Result("Benefactor account not found.");
-
+                throw new AccountNotFoundException(command.Benefactor, "Benefactor account not found.");
+            
             if (!_messages.Dispatch(new HasAccountQuery(command.Recipient)))
-                return new Result("Recipient account not found.");
+                throw new AccountNotFoundException(command.Recipient, "Recipient account not found.");
 
             var disposable = _messages.Dispatch(new GetDisposableAmountQuery(command.Benefactor));
             if (disposable < command.Amount)
-                return new Result("Amount exceeds account balance.");
+                throw new AmountRejectedException(disposable, "Amount exceeds disposable amount.");
 
-            var transferDate = _timeProvider.Now;
-
-            _messages.Dispatch(new AmountTransferedEvent(command.Benefactor, command.Recipient, command.Amount, command.Description, transferDate));
-
-            return new Result();
+            _messages.Dispatch(new AmountTransferedEvent(_timeProvider.Now, command.ProcessId, command.Benefactor, command.Recipient, command.Amount, command.Description));
         }
     }
 }

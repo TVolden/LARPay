@@ -5,19 +5,23 @@ namespace dk.lashout.LARPay.Accounting.Events
 {
     public class AmountTransferedEvent : IEvent
     {
+        public int Version => 1;
+        public DateTime EventTime { get; }
+        public Guid ProcessId { get; }
+
         public Guid BenefactorAccountId { get; }
         public Guid ReceipientAccountId { get; }
         public decimal Amount { get; }
         public string Description { get; }
-        public DateTime Date { get; }
 
-        public AmountTransferedEvent(Guid benefactor, Guid receipient, decimal amount, string description, DateTime date)
+        public AmountTransferedEvent(DateTime eventTime, Guid processId, Guid benefactor, Guid receipient, decimal amount, string description)
         {
             BenefactorAccountId = benefactor;
             ReceipientAccountId = receipient;
             Amount = amount;
             Description = description;
-            Date = date;
+            EventTime = eventTime;
+            ProcessId = processId;
         }
     }
 }
