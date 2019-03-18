@@ -6,7 +6,7 @@ namespace dk.lashout.LARPay.Accounting.Events
     public class CreditLimitChangedEvent : IEvent
     {
         public int Version => 1;
-        public DateTime EventTime { get; }
+        public DateTime EventDate { get; }
         public Guid ProcessId { get; }
 
         public Guid AccountId { get; }
@@ -14,7 +14,7 @@ namespace dk.lashout.LARPay.Accounting.Events
 
         public CreditLimitChangedEvent(DateTime eventTime, Guid processId, Guid accountId, decimal creditLimit)
         {
-            EventTime = eventTime;
+            EventDate = eventTime;
             ProcessId = processId;
             AccountId = accountId;
             CreditLimit = creditLimit;

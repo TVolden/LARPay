@@ -15,8 +15,13 @@ namespace dk.lashout.LARPay.AccountArchive.EventObservers
 
         public void Update(AccountCreatedEvent @event)
         {
+            if (@event.EventDate <= _archive.LastEventDate)
+                return;
+
             var account = new Account(@event.CustomerId);
             _archive.AddAccount(@event.AccountId, account);
+
+            _archive.LastEventDate = @event.EventDate;
         }
     }
 }

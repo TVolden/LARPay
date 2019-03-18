@@ -17,6 +17,8 @@ using dk.lashout.LARPay.CustomerArchive.QueryHandlers;
 using dk.lashout.LARPay.Customers;
 using dk.lashout.LARPay.Customers.Events;
 using dk.lashout.LARPay.Customers.Forms;
+using dk.lashout.LARPay.EventArchive;
+using dk.lashout.LARPay.EventArchive.Decorator;
 using dk.lashout.MaybeType;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -41,7 +43,6 @@ namespace dk.lashout.LARPay
         {
             var secretKey = Encoding.UTF8.GetBytes(_configuration["jwt:SecretKey"]);
 
-
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -62,6 +63,9 @@ namespace dk.lashout.LARPay
 
             services.AddSingleton<AccountStates>();
             services.AddSingleton<CustomerStates>();
+            
+            services.AddSingleton<EventStorageFactory>();
+            services.AddSingleton(provider => provider.GetService<EventStorageFactory>().Create(_configuration["EventStore:path"], _configuration["EventStore:file"]));
 
             services.AddSingleton<IQueryHandler<GetBalanceQuery, decimal>, GetBalanceQueryHandler>();
             services.AddSingleton<IQueryHandler<GetAccountIdByCustomerIdQuery, Maybe<Guid>>, GetAccountIdByCustomerIdQueryHandler>();
@@ -83,14 +87,20 @@ namespace dk.lashout.LARPay
             services.AddSingleton<ICommandHandler<RegisterCustomerCommand>, RegisterCustomerCommandHandler> ();
             services.AddSingleton<ICommandHandler<SetCreditLimitForAccountIdCommand>, SetCreditLimitForAccountIdCommandHandler> ();
 
-            services.AddSingleton<IEventObserver<CreditLimitChangedEvent>, CreditLimitChangedEventObserver> ();
-            services.AddSingleton<IEventObserver<AmountTransferedEvent>, AmountTransferedEventObserver> ();
-            services.AddSingleton<IEventObserver<AccountCreatedEvent>, AccountCreatedEventObserver> ();
-            services.AddSingleton<IEventObserver<CustomerRegisteredEvent>, CustomerRegisteredEventObserver> ();
+            services.AddSingleton<EventSaverFactory>();
+            services.AddSingleton<CreditLimitChangedEventObserver>();
+            services.AddSingleton<AmountTransferedEventObserver>();
+            services.AddSingleton<AccountCreatedEventObserver>();
+            services.AddSingleton<CustomerRegisteredEventObserver>();
+            services.AddSingleton(provider => provider.GetService<EventSaverFactory>().Create(provider.GetService<AccountCreatedEventObserver>()));
+            services.AddSingleton(provider => provider.GetService<EventSaverFactory>().Create(provider.GetService<CreditLimitChangedEventObserver>()));
+            services.AddSingleton(provider => provider.GetService<EventSaverFactory>().Create(provider.GetService<AmountTransferedEventObserver>()));
+            services.AddSingleton(provider => provider.GetService<EventSaverFactory>().Create(provider.GetService<CustomerRegisteredEventObserver>()));
 
             services.AddSingleton<ITimeProvider, UtcTime>();
             services.AddSingleton<AccountFacade>();
             services.AddSingleton<CustomerFacade>();
+
             services.AddSingleton<TransferDtoVisitorFactory>();
             services.AddSingleton<TransactionAdapterFactory>();
             services.AddMvc();

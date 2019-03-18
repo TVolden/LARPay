@@ -9,6 +9,7 @@ namespace dk.lashout.LARPay.AccountArchive
     public class AccountStates
     {
         private readonly Dictionary<Guid, Account> _accounts;
+        public DateTime LastEventDate { get; set; }
 
         public AccountStates()
         {

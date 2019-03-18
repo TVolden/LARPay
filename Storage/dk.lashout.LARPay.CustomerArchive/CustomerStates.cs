@@ -8,6 +8,7 @@ namespace dk.lashout.LARPay.CustomerArchive
     public class CustomerStates
     {
         private readonly Dictionary<Guid, Customer> _customers;
+        public DateTime LastEventDate { get; set; }
 
         public CustomerStates()
         {

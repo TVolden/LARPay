@@ -15,8 +15,13 @@ namespace dk.lashout.LARPay.CustomerArchive.EventObservers
 
         public void Update(CustomerRegisteredEvent @event)
         {
+            if (@event.EventDate <= _archive.LastEventDate)
+                return;
+
             var customer = new Customer(@event.Username, @event.Pincode, @event.Name);
             _archive.AddCustomer(@event.CustomerId, customer);
+
+            _archive.LastEventDate = @event.EventDate;
         }
     }
 }

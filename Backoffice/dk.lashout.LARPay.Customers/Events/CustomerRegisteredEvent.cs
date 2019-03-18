@@ -6,7 +6,7 @@ namespace dk.lashout.LARPay.Customers.Events
     public class CustomerRegisteredEvent : IEvent
     {
         public int Version => 1;
-        public DateTime EventTime { get; }
+        public DateTime EventDate { get; }
         public Guid ProcessId { get; }
 
         public Guid CustomerId { get; }
@@ -16,7 +16,7 @@ namespace dk.lashout.LARPay.Customers.Events
 
         public CustomerRegisteredEvent(DateTime eventTime, Guid processId, Guid customerId, string username, string pincode, string name)
         {
-            EventTime = eventTime;
+            EventDate = eventTime;
             ProcessId = processId;
             CustomerId = customerId;
             Username = username;

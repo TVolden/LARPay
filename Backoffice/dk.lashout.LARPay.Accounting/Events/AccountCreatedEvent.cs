@@ -6,7 +6,7 @@ namespace dk.lashout.LARPay.Accounting.Events
     public class AccountCreatedEvent : IEvent
     {
         public int Version => 1;
-        public DateTime EventTime { get; }
+        public DateTime EventDate { get; }
         public Guid ProcessId { get; }
 
         public Guid AccountId { get; }
@@ -16,7 +16,7 @@ namespace dk.lashout.LARPay.Accounting.Events
         {
             AccountId = accountId;
             CustomerId = customerId;
-            EventTime = eventTime;
+            EventDate = eventTime;
             ProcessId = processId;
         }
     }

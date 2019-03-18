@@ -16,14 +16,19 @@ namespace dk.lashout.LARPay.AccountArchive.EventObservers
 
         public void Update(AmountTransferedEvent @event)
         {
+            if (@event.EventDate <= _archive.LastEventDate)
+                return;
+
             var benefactor = _archive.GetAccount(@event.BenefactorAccountId).ValueOrDefault(null);
             var recipient = _archive.GetAccount(@event.ReceipientAccountId).ValueOrDefault(null);
 
-            var debit = new Debit(@event.ReceipientAccountId, @event.Amount, @event.Description, @event.EventTime);
-            var credit = new Credit(@event.BenefactorAccountId, @event.Amount, @event.Description, @event.EventTime);
+            var debit = new Debit(@event.ReceipientAccountId, @event.Amount, @event.Description, @event.EventDate);
+            var credit = new Credit(@event.BenefactorAccountId, @event.Amount, @event.Description, @event.EventDate);
 
             benefactor.AddTransaction(debit);
             recipient.AddTransaction(credit);
+
+            _archive.LastEventDate = @event.EventDate;
         }
     }
 }

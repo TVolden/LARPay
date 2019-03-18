@@ -5,18 +5,23 @@ namespace dk.lashout.LARPay.AccountArchive.EventObservers
 {
     public class CreditLimitChangedEventObserver : IEventObserver<CreditLimitChangedEvent>
     {
-        private readonly AccountStates archive;
+        private readonly AccountStates _archive;
 
         public CreditLimitChangedEventObserver(AccountStates archive)
         {
-            this.archive = archive ?? throw new System.ArgumentNullException(nameof(archive));
+            _archive = archive ?? throw new System.ArgumentNullException(nameof(archive));
         }
 
         public void Update(CreditLimitChangedEvent @event)
         {
-            var account = archive.GetAccount(@event.AccountId);
+            if (@event.EventDate <= _archive.LastEventDate)
+                return;
+
+            var account = _archive.GetAccount(@event.AccountId);
             if (account.HasValue())
                 account.ValueOrDefault(null).creditLimit = @event.CreditLimit;
+
+            _archive.LastEventDate = @event.EventDate;
         }
     }
 }

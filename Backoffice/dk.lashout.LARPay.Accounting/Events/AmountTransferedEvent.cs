@@ -6,7 +6,7 @@ namespace dk.lashout.LARPay.Accounting.Events
     public class AmountTransferedEvent : IEvent
     {
         public int Version => 1;
-        public DateTime EventTime { get; }
+        public DateTime EventDate { get; }
         public Guid ProcessId { get; }
 
         public Guid BenefactorAccountId { get; }
@@ -20,7 +20,7 @@ namespace dk.lashout.LARPay.Accounting.Events
             ReceipientAccountId = receipient;
             Amount = amount;
             Description = description;
-            EventTime = eventTime;
+            EventDate = eventTime;
             ProcessId = processId;
         }
     }
