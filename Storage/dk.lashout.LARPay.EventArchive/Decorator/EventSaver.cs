@@ -15,13 +15,8 @@ namespace dk.lashout.LARPay.EventArchive.Decorator
 
         public void Update(TEvent @event)
         {
-            if (@event.EventDate <= _archive.LastEventDate)
-                return;
-
             _archive.AddEvent(@event);
             _observer.Update(@event);
-
-            _archive.LastEventDate = @event.EventDate;
         }
     }
 }

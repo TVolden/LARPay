@@ -11,11 +11,12 @@ namespace dk.lashout.LARPay.EventArchive
     {
  
         private readonly Messages _messages;
-        private readonly FileStream _eventStore;
+        private readonly string _eventStore;
         private List<IEvent> _events;
-        public DateTime LastEventDate { get; set; }
+        private DateTime _lastEventDate;
+        private bool replaying = false;
 
-        public EventStorage(Messages messages, FileStream eventStore)
+        public EventStorage(Messages messages, string eventStore)
         {
             _events = new List<IEvent>();
             _messages = messages ?? throw new ArgumentNullException(nameof(messages));
@@ -24,18 +25,41 @@ namespace dk.lashout.LARPay.EventArchive
 
         public void AddEvent(IEvent @event)
         {
+            if (replaying)
+                return;
+
+            if (_lastEventDate <= @event.EventDate)
+                return;
+
             var jsonEvent = JsonConvert.SerializeObject(@event);
-            var output = $"{@event.GetType()}:{jsonEvent}";
-            var eventStoreWriter = new StreamWriter(_eventStore);
-            eventStoreWriter.WriteLine(output);
-            eventStoreWriter.Dispose();
+            var output = $"\"{@event.GetType().AssemblyQualifiedName}\":{jsonEvent}";
+            using(var eventStoreWriter = new StreamWriter(_eventStore, true)) {
+                eventStoreWriter.WriteLine(output);
+            }
+
+            _lastEventDate = @event.EventDate;
         }
 
         public void ReplayEvents(DateTime from)
         {
-            foreach (var @event in _events.Select(e => e.EventDate >= from))
+            if (!File.Exists(_eventStore))
+                return;
+
+            using (var eventStoreReader = new StreamReader(_eventStore))
             {
-                _messages.Dispatch((dynamic)@event);
+                string eventLine;
+                while ((eventLine = eventStoreReader.ReadLine()) != null)
+                {
+                    (var type, var data) = eventLine.Split(':', 2);
+                    var settings = new JsonSerializerSettings {
+                        DateFormatString = "yyyy-MM-ddTH:mm:ss.fffK",
+                        DateTimeZoneHandling = DateTimeZoneHandling.Utc
+                    };
+                    dynamic @event = JsonConvert.DeserializeObject(data, Type.GetType(type.Replace("\"", "")), settings);
+                    replaying = true;
+                    _messages.Dispatch(@event);
+                    replaying = false;
+                }
             }
         }
     }

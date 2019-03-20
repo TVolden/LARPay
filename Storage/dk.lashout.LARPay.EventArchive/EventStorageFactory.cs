@@ -16,8 +16,8 @@ namespace dk.lashout.LARPay.EventArchive
         {
             var eventStorePath = Path.GetFullPath(storePath);
             Directory.CreateDirectory(eventStorePath);
-            var eventStoreStream = File.Create(eventStorePath + storeFile);
-            return new EventStorage(_messages, eventStoreStream);
+            var eventStore = eventStorePath + storeFile;
+            return new EventStorage(_messages, eventStore);
         }
     }
 }

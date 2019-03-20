@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Thomas Volden</Authors>
     <Company>Lashout</Company>
     <Product>LARPay</Product>
@@ -16,8 +16,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Backoffice\dk.lashout.LARPay.Accounting\dk.lashout.LARPay.Accounting.csproj" />
     <ProjectReference Include="..\Backoffice\dk.lashout.LARPay.Customers\dk.lashout.LARPay.Customers.csproj" />
+    <ProjectReference Include="..\Storage\dk.lashout.LARPay.AccountArchive\dk.lashout.LARPay.AccountArchive.csproj" />
+    <ProjectReference Include="..\Storage\dk.lashout.LARPay.CustomerArchive\dk.lashout.LARPay.CustomerArchive.csproj" />
   </ItemGroup>
 
 </Project>
