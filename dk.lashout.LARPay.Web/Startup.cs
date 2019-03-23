@@ -6,6 +6,7 @@ using dk.lashout.LARPay.AccountArchive.Applications;
 using dk.lashout.LARPay.AccountArchive.EventObservers;
 using dk.lashout.LARPay.AccountArchive.QueryHandlers;
 using dk.lashout.LARPay.Accounting;
+using dk.lashout.LARPay.Accounting.Events;
 using dk.lashout.LARPay.Accounting.Forms;
 using dk.lashout.LARPay.Administration;
 using dk.lashout.LARPay.Bank;
@@ -14,6 +15,7 @@ using dk.lashout.LARPay.CustomerArchive;
 using dk.lashout.LARPay.CustomerArchive.EventObservers;
 using dk.lashout.LARPay.CustomerArchive.QueryHandlers;
 using dk.lashout.LARPay.Customers;
+using dk.lashout.LARPay.Customers.Events;
 using dk.lashout.LARPay.Customers.Forms;
 using dk.lashout.LARPay.EventArchive;
 using dk.lashout.LARPay.EventArchive.Decorator;
@@ -24,6 +26,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace dk.lashout.LARPay
 {
@@ -61,22 +64,20 @@ namespace dk.lashout.LARPay
 
             services.AddSingleton<AccountStates>();
             services.AddSingleton<CustomerStates>();
-            
+
+            services.AddSingleton<IEventTypeIdentifier, EventTypeIdentifier>(provider => 
+            new EventTypeIdentifier(
+                typeof(AccountCreatedEvent),
+                typeof(AmountTransferedEvent),
+                typeof(CreditLimitChangedEvent),
+                typeof(CustomerRegisteredEvent)
+                ));
             services.AddSingleton<EventStorageFactory>();
             services.AddSingleton(provider => provider.GetService<EventStorageFactory>().Create(_configuration["EventStore:path"], _configuration["EventStore:file"]));
 
             services.AddQueryHandlers();
             services.AddCommandHandlers();
-
-            services.AddSingleton<CreditLimitChangedEventObserver>();
-            services.AddSingleton<AmountTransferedEventObserver>();
-            services.AddSingleton<AccountCreatedEventObserver>();
-            services.AddSingleton<CustomerRegisteredEventObserver>();
-            services.AddSingleton<EventSaverFactory>();
-            services.AddSingleton(provider => provider.GetService<EventSaverFactory>().Create(provider.GetService<AccountCreatedEventObserver>()));
-            services.AddSingleton(provider => provider.GetService<EventSaverFactory>().Create(provider.GetService<CreditLimitChangedEventObserver>()));
-            services.AddSingleton(provider => provider.GetService<EventSaverFactory>().Create(provider.GetService<AmountTransferedEventObserver>()));
-            services.AddSingleton(provider => provider.GetService<EventSaverFactory>().Create(provider.GetService<CustomerRegisteredEventObserver>()));
+            services.AddEventObservers();
 
             services.AddSingleton<ITimeProvider, UtcTime>();
             services.AddSingleton<AccountFacade>();
@@ -84,7 +85,11 @@ namespace dk.lashout.LARPay
 
             services.AddSingleton<TransferDtoVisitorFactory>();
             services.AddSingleton<TransactionAdapterFactory>();
-            services.AddMvc();
+            services.AddMvc()
+                   .AddJsonOptions(options =>
+                    {
+                        options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+                    });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

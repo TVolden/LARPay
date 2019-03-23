@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Backoffice\dk.lashout.LARPay.Administration\dk.lashout.LARPay.Administration.csproj" />
+    <ProjectReference Include="..\..\Backoffice\dk.lashout.MaybeType\dk.lashout.MaybeType.csproj" />
   </ItemGroup>
 
 </Project>

@@ -12,11 +12,11 @@ namespace dk.lashout.LARPay.Accounting.Events
         public Guid AccountId { get; }
         public Guid CustomerId { get; }
 
-        public AccountCreatedEvent(DateTime eventTime, Guid processId, Guid accountId, Guid customerId)
+        public AccountCreatedEvent(DateTime eventDate, Guid processId, Guid accountId, Guid customerId)
         {
             AccountId = accountId;
             CustomerId = customerId;
-            EventDate = eventTime;
+            EventDate = eventDate;
             ProcessId = processId;
         }
     }

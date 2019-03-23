@@ -14,13 +14,13 @@ namespace dk.lashout.LARPay.Accounting.Events
         public decimal Amount { get; }
         public string Description { get; }
 
-        public AmountTransferedEvent(DateTime eventTime, Guid processId, Guid benefactor, Guid receipient, decimal amount, string description)
+        public AmountTransferedEvent(DateTime eventDate, Guid processId, Guid benefactorAccountId, Guid receipientAccountId, decimal amount, string description)
         {
-            BenefactorAccountId = benefactor;
-            ReceipientAccountId = receipient;
+            BenefactorAccountId = benefactorAccountId;
+            ReceipientAccountId = receipientAccountId;
             Amount = amount;
             Description = description;
-            EventDate = eventTime;
+            EventDate = eventDate;
             ProcessId = processId;
         }
     }

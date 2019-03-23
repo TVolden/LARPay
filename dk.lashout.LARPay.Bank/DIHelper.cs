@@ -9,6 +9,8 @@ using dk.lashout.LARPay.CustomerArchive.QueryHandlers;
 using dk.lashout.LARPay.Customers;
 using dk.lashout.LARPay.Customers.Events;
 using dk.lashout.LARPay.Customers.Forms;
+using dk.lashout.LARPay.EventArchive;
+using dk.lashout.LARPay.EventArchive.Decorator;
 using dk.lashout.MaybeType;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -42,6 +44,20 @@ namespace dk.lashout.LARPay.Bank
             services.AddSingleton<ICommandHandler<TransferAmountCommand>, TransferMoneyCommandHandler>();
             services.AddSingleton<ICommandHandler<RegisterCustomerCommand>, RegisterCustomerCommandHandler>();
             services.AddSingleton<ICommandHandler<SetCreditLimitForAccountIdCommand>, SetCreditLimitForAccountIdCommandHandler>();
+        }
+
+        public static void AddEventObservers(this IServiceCollection services)
+        {
+            services.AddSingleton<CreditLimitChangedEventObserver>();
+            services.AddSingleton<AmountTransferedEventObserver>();
+            services.AddSingleton<AccountCreatedEventObserver>();
+            services.AddSingleton<CustomerRegisteredEventObserver>();
+
+            services.AddSingleton<EventSaverFactory>();
+            services.AddSingleton(provider => provider.GetService<EventSaverFactory>().Create(provider.GetService<AccountCreatedEventObserver>()));
+            services.AddSingleton(provider => provider.GetService<EventSaverFactory>().Create(provider.GetService<CreditLimitChangedEventObserver>()));
+            services.AddSingleton(provider => provider.GetService<EventSaverFactory>().Create(provider.GetService<AmountTransferedEventObserver>()));
+            services.AddSingleton(provider => provider.GetService<EventSaverFactory>().Create(provider.GetService<CustomerRegisteredEventObserver>()));
         }
     }
 }
