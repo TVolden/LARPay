@@ -1,1 +1,41 @@
-﻿
+﻿body {
+    background-color: #1D3557;
+    color: #F1FAEE;
+}
+
+.card a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    font-size: large;
+    font-weight: 700;
+}
+
+div.primary {
+    background-color: #E63946;
+    border: 2px solid #A8DADC;
+    color: #E63946;
+}
+
+div.primary a {
+    color: #F1FAEE;
+}
+
+div.secondary {
+    background-color: #457B9D;
+    border: 2px solid #A8DADC;
+    color: #1D3557;
+}
+
+div.secondary a {
+    color: #1D3557;
+}
+
+.btn-primary {
+    background-color: #E63946;
+    border-color: #F1FAEE;
+}
+
+.primary {
+    color: #A8DADC;
+}

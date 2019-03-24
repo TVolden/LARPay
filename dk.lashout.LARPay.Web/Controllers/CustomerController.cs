@@ -87,7 +87,7 @@ namespace dk.lashout.LARPay.Web.Controllers
                 }),
                 Issuer = _configuration["jwt:Issuer"],
                 Audience = _configuration["jwt:Audience"],
-                Expires = now.AddMinutes(Convert.ToInt32(20)),
+                Expires = now.AddMonths(3),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(symmetricKey), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

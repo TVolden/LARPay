@@ -25,5 +25,9 @@ namespace dk.lashout.LARPay.Bank
             ).Value;
 
         public DateTime Date => _transfer.Date;
+
+        public string Benefactor => new Lazy<string>(() =>
+            _messages.Dispatch(new GetUsernameByCustomerIdQuery(_transfer.BenefactorCustomerId)).ValueOrDefault("?")
+            ).Value;
     }
 }

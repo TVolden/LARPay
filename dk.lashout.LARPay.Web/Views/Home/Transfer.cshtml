@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Transfer";
+}
+
+<h1>Transfer</h1>
+
+<form id="transfer_form">
+    <div class="form-group">
+        <label for="inputRecipient">Recipient</label>
+        <input type="text" class="form-control" id="inputRecipient" placeholder="" />
+    </div>
+    <div class="form-group">
+        <label for="inputAmount">Amount</label>
+        <input type="number" class="form-control" id="inputAmount" placeholder="" />
+    </div>
+    <div class="form-group">
+        <label for="inputDescription">Description</label>
+        <textarea class="form-control" id="inputDescription" cols="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Transfer</button>
+    <a class="btn btn-link float-right" href="/home/account">Cancel</a>
+</form>
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            var transfer_application;
+            $.getJSON('/account/transfer',
+                function (data) {
+                    transfer_application = data;
+                    $('#inputRecipient').attr('placeholder', data.recipient);
+                    $('#inputAmount').attr('placeholder', data.amount);
+                    $('#inputDescription').attr('placeholder', data.description);
+                });
+
+            $('#transfer_form').on('submit',
+                function () {
+                    var recipient = $('#inputRecipient').val();
+                    var amount = $('#inputAmount').val();
+                    var description = $('#inputDescription').val();
+                    transfer(recipient, amount, description);
+                    return false;
+                });
+
+            function transfer(recipient, amount, description) {
+                var transaction_request = jQuery.extend({}, transfer_application);
+                transaction_request.recipient = recipient;
+                transaction_request.amount = amount;
+                transaction_request.description = description;
+
+                authPost('/account/transfer', transaction_request).done(function (response) {
+                    gotoAccount();
+                });
+            }
+
+            function gotoAccount() {
+                alert("Spiel!");
+                window.location.href = '/home/account';
+            }
+        });
+    </script>
+}

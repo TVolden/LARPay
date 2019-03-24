@@ -7,6 +7,7 @@ namespace dk.lashout.LARPay.Bank
         decimal Amount { get; }
         string Description { get; }
         string Recipient { get; }
+        string Benefactor { get; }
         DateTime Date { get; }
     }
 }

@@ -64,6 +64,7 @@ namespace dk.lashout.LARPay.Web.Controllers
                 {
                     Amount = trx.Amount,
                     Description = trx.Description,
+                    Benefactor = trx.Benefactor,
                     Recipient = trx.Recipient,
                     Date = trx.Date
                 };

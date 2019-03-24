@@ -1,135 +1,71 @@
 ﻿@{
     ViewData["Title"] = "Account";
 }
-
 <h1>Account</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Date</th>
-            <th scope="col">Recipient</th>
-            <th scope="col">Amount</th>
-            <th scope="col">Description</th>
-        </tr>
-    </thead>
-    <tbody id="transactions">
+<nav>
+    <div class="row">
+        <div class="col-6">
+            <div class="card primary">
+                <a class="" href="/home/transfer">
+                    <div class="card-body">
+                        Transfer
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
 
-    </tbody>
-</table>
+<h2 class="primary">Balance: <span class="float-right" id="balance">0</span></h2>
 
-<div class="row">
-    <div class="col">Balance:</div>
-    <div class="col" id="balance"></div>
+<div class="table-responsive">
+    <table class="table text-light">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">From</th>
+                <th scope="col">To</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Description</th>
+            </tr>
+        </thead>
+        <tbody id="transactions">
+            <tr id="template-row" style="display: none;">
+                <td scope="row"><span id="placeholder-for-date" /></td>
+                <td scope="row"><span id="placeholder-for-benefactor" /></td>
+                <td scope="row"><span id="placeholder-for-recipient" /></td>
+                <td scope="row"><span id="placeholder-for-amount" /></td>
+                <td scope="row" class=""><span id="placeholder-for-description" /></td>
+            </tr>
+        </tbody>
+    </table>
 </div>
-
-<hr/>
-
-<form id="transfer_form">
-    <div class="form-group">
-        <label for="inputRecipient">Recipient</label>
-        <input type="text" class="form-control" id="inputRecipient" placeholder="" />
-    </div>
-    <div class="form-group">
-        <label for="inputAmount">Amount</label>
-        <input type="number" class="form-control" id="inputAmount" placeholder="" />
-    </div>
-    <div class="form-group">
-        <label for="inputDescription">Description</label>
-        <textarea class="form-control" id="inputDescription" cols="3"></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Transfer</button>
-</form>
-
-<form id="creditLimit_form">
-    <div class="form-group">
-        <label for="inputCreditLimit">Credit limit</label>
-        <input type="number" min="0" class="form-control" id="inputCreditLimit" placeholder="" />
-    </div>
-    <button type="submit" class="btn btn-primary">Set credit limit</button>
-</form>
 
 @section Scripts
 {
     <script>
         $(function () {
-
-            $.ajax({
-                type: "GET",
-                url: '/account/balance',
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("Authorization", 'Bearer ' + sessionStorage.token);
-                }
-            }).done(function (data) {
+            authGet('/account/balance').done(function (data) {
                     $('#balance').text(data);
-                });
-
-            $.ajax({
-                type: "GET",
-                url: '/account/statement',
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("Authorization", 'Bearer ' + sessionStorage.token);
-                }
-            }).done(function (data) {
-                for (i = data.length-1; i >= 0; i--) {
-                    $('#transactions').append('<tr><td scope="row">' + data[i].date + '</td><td scope="row">' + data[i].recipient + '</td><td>' + data[i].amount + '</td><td>' + data[i].description + '</td></tr>');
-                }
             });
 
-            var transfer_application;
-            $.getJSON('/account/transfer',
-                function(data) {
-                    transfer_application = data;
-                    $('#inputRecipient').attr('placeholder', data.recipient);
-                    $('#inputAmount').attr('placeholder', data.amount);
-                    $('#inputDescription').attr('placeholder', data.description);
-                });
-
-            $('#transfer_form').on('submit',
-                function () {
-                    var recipient = $('#inputRecipient').val();
-                    var amount = $('#inputAmount').val();
-                    var description = $('#inputDescription').val();
-                    transfer(recipient, amount, description);
-                    return false;
-                });
-
-            $('#creditLimit_form').on('submit',
-                function () {
-                    var creditLimit = $('#inputCreditLimit').val();
-                    setCreditLimit(creditLimit);
-                    return false;
-                })
-
-            function transfer(recipient, amount, description) {
-
-                var transaction_request = jQuery.extend({}, transfer_application);
-                transaction_request.recipient = recipient;
-                transaction_request.amount = amount;
-                transaction_request.description = description;
-
-                $.ajax({
-                    type: "POST",
-                    url: '/account/transfer',
-                    data: transaction_request,
-                    beforeSend: function(xhr) {
-                        xhr.setRequestHeader("Authorization", 'Bearer ' + sessionStorage.token);
-                    }
-                }).done(function(response) {
-                    location.reload();
-                });
-            }
-
-            function setCreditLimit(creditLimit) {
-                $.ajax({
-                    type: "POST",
-                    url: '/account/creditlimit',
-                    data: { 'creditLimit': creditLimit},
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader("Authorization", 'Bearer ' + sessionStorage.token);
-                    }
-                })
-            }
+            authGet('/account/statement').done(function (data) {
+                for (i = data.length - 1; i >= 0; i--) {
+                    var clone = $('#template-row').clone();
+                    clone.removeAttr('id');
+                    clone.find('#placeholder-for-date').replaceWith(formatDate(data[i].date));
+                    clone.find('#placeholder-for-benefactor').replaceWith(data[i].benefactor);
+                    clone.find('#placeholder-for-recipient').replaceWith(data[i].recipient);
+                    clone.find('#placeholder-for-amount').replaceWith(data[i].amount);
+                    clone.find('#placeholder-for-description').replaceWith(data[i].description);
+                    clone.show();
+                    clone.appendTo('#transactions');
+                }
+            });
         });
+
+        if (!isLoggedIn())
+            window.location.href = '/';
     </script>
 }

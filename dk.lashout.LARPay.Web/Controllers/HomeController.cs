@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Security.Claims;
 using dk.lashout.LARPay.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dk.lashout.LARPay.Controllers
@@ -27,6 +29,16 @@ namespace dk.lashout.LARPay.Controllers
         }
 
         public IActionResult Account()
+        {
+            return View();
+        }
+
+        public IActionResult Transfer()
+        {
+            return View();
+        }
+
+        public IActionResult CreditLimit()
         {
             return View();
         }

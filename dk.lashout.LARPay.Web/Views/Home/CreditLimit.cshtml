@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "CreditLimit";
+}
+<h2>CreditLimit</h2>
+
+<form id="creditLimit_form">
+    <div class="form-group">
+        <label for="inputCreditLimit">Credit limit</label>
+        <input type="number" min="0" class="form-control" id="inputCreditLimit" placeholder="" />
+    </div>
+    <button type="submit" class="btn btn-primary">Set credit limit</button>
+    <a class="btn btn-link float-right" href="/home/account">Cancel</a>
+</form>
+
+@section Scripts
+    {
+    <script>
+        $(function () {
+            $('#creditLimit_form').on('submit',
+                function () {
+                    var creditLimit = $('#inputCreditLimit').val();
+                    setCreditLimit(creditLimit);
+                    return false;
+                })
+
+            function setCreditLimit(creditLimit) {
+                $.ajax({
+                    type: "POST",
+                    url: '/account/creditlimit',
+                    data: { 'creditLimit': creditLimit },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Authorization", 'Bearer ' + localStorage.token);
+                    }
+                })
+            }
+        });
+    </script>
+}
