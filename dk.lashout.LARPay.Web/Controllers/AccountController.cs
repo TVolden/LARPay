@@ -33,6 +33,10 @@ namespace dk.lashout.LARPay.Web.Controllers
         public IActionResult Transfer(TransferViewModel model)
         {
             var sender = getCurrentUser();
+
+            if (sender == model.Recipient)
+                return BadRequest("Can't transfer to yourself.");
+
             try
             {
                 _accountFacade.Transfer(sender, model.Recipient, model.Amount, model.Description);

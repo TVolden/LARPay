@@ -24,14 +24,13 @@
                 })
 
             function setCreditLimit(creditLimit) {
-                $.ajax({
-                    type: "POST",
-                    url: '/account/creditlimit',
-                    data: { 'creditLimit': creditLimit },
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader("Authorization", 'Bearer ' + localStorage.token);
-                    }
-                })
+                authPost('/account/creditlimit', { 'creditLimit': creditLimit }).done(function (response) {
+                    gotoAccount();
+                });
+            }
+
+            function gotoAccount() {
+                window.location.href = '/home/account';
             }
         });
     </script>
