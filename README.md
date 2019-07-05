@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/vasevolden/vasevolden/_apis/build/status/TVolden.LARPay?branchName=master)](https://dev.azure.com/vasevolden/vasevolden/_build/latest?definitionId=4&branchName=master)
+
 ![Deployment status](https://vsrm.dev.azure.com/vasevolden/_apis/public/Release/badge/a950e1d1-0909-4a47-9799-c8cbb0cde82a/3/5)
 
 # LARPay
