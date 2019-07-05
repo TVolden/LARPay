@@ -16,6 +16,8 @@ variables:
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
+- script: dotnet publish -c $(buildConfiguration) -r $(targetPlatform) --output $(Build.ArtifactStagingDirectory)	
+  displayName: 'dotnet publish $(Build.ArtifactStagingDirectory)'
 - task: DotNetCoreCLI@2
   inputs:
     command: 'publish'
