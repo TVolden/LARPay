@@ -37,6 +37,9 @@ namespace dk.lashout.LARPay.Accounting
 
         public void Handle(TransferAmountCommand command)
         {
+            if (command.Amount < 1)
+                throw new AmountRejectedException(command.Amount, "Illegal amount.");
+
             if (!_messages.Dispatch(new HasAccountQuery(command.Benefactor)))
                 throw new AccountNotFoundException(command.Benefactor, "Benefactor account not found.");
             
